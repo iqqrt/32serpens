@@ -17,7 +17,10 @@ class ConstellationCanvas {
     this.activePhase = 0;
 
     this.onStarClickCallback = null;
-    this.onConstellationComplete = null; // Called when full animation (fly-in + lines) finishes
+    this.onConstellationComplete = null;
+
+    // Tap Shockwave Ripples
+    this.ripples = [];
 
     // Camera Transform State (for cinematic deep space zoom into clicked stars)
     this.camera = { x: 0, y: 0, scale: 1 };
@@ -473,6 +476,9 @@ class ConstellationCanvas {
         const star = this.stars[i];
         const dist = Math.hypot(pos.x - star.x, pos.y - star.y);
         if (dist <= hitRadius) {
+          // Trigger magical tap shockwave ripple ring on clicked star!
+          this.addTapRipple(star.x, star.y);
+
           if (this.onStarClickCallback) {
             this.onStarClickCallback(star, i);
           }
@@ -564,10 +570,61 @@ class ConstellationCanvas {
     // 5. Draw 33 Constellation Node Stars & Labels
     this.drawConstellationStars();
 
+    // 6. Draw Tap Shockwave Ripples
+    this.drawRipples();
+
     // Restore Screen Space Matrix
     this.ctx.restore();
 
     requestAnimationFrame(this._animateBound);
+  }
+
+  addTapRipple(x, y) {
+    this.ripples.push({
+      x: x,
+      y: y,
+      radius: 6,
+      maxRadius: this.isMobile ? 38 : 50,
+      alpha: 1
+    });
+    this.markDirty();
+  }
+
+  drawRipples() {
+    if (this.ripples.length === 0) return;
+
+    this.ctx.save();
+    for (let i = this.ripples.length - 1; i >= 0; i--) {
+      const r = this.ripples[i];
+      r.radius += (r.maxRadius - r.radius) * 0.22 + 0.6;
+      r.alpha -= 0.045;
+
+      if (r.alpha <= 0 || r.radius >= r.maxRadius) {
+        this.ripples.splice(i, 1);
+        continue;
+      }
+
+      // Golden expanding celestial ring
+      this.ctx.strokeStyle = `rgba(251, 191, 36, ${r.alpha})`;
+      this.ctx.lineWidth = 2.2;
+      this.ctx.beginPath();
+      this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+      this.ctx.stroke();
+
+      // Inner magenta glow ring
+      if (r.radius > 10) {
+        this.ctx.strokeStyle = `rgba(232, 121, 249, ${r.alpha * 0.75})`;
+        this.ctx.lineWidth = 1.2;
+        this.ctx.beginPath();
+        this.ctx.arc(r.x, r.y, r.radius * 0.65, 0, Math.PI * 2);
+        this.ctx.stroke();
+      }
+    }
+    this.ctx.restore();
+
+    if (this.ripples.length > 0) {
+      this._dirty = true;
+    }
   }
 
   drawNebulaBackground() {
@@ -649,18 +706,29 @@ class ConstellationCanvas {
   }
 
   drawBgStars() {
+    const time = Date.now() * 0.002;
+
     if (this.isMobile) {
-      // Mobile ultra-fast single-path batch draw
+      // Mobile fast batched 3-phase twinkling stars (3 draw calls total)
       this.ctx.save();
-      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
-      this.ctx.beginPath();
-      for (let star of this.bgStars) {
-        if (star.revealAlpha <= 0) continue;
-        this.ctx.moveTo(star.x + star.radius, star.y);
-        this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      const phases = [0, 2.1, 4.2];
+
+      for (let p = 0; p < 3; p++) {
+        const alpha = 0.35 + Math.sin(time * 1.5 + phases[p]) * 0.3;
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.12, alpha)})`;
+        this.ctx.beginPath();
+
+        for (let i = p; i < this.bgStars.length; i += 3) {
+          const star = this.bgStars[i];
+          if (star.revealAlpha <= 0) continue;
+          this.ctx.moveTo(star.x + star.radius, star.y);
+          this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        }
+        this.ctx.fill();
       }
-      this.ctx.fill();
+
       this.ctx.restore();
+      this._dirty = true;
       return;
     }
 
