@@ -33,6 +33,14 @@ class ConstellationCanvas {
     this.introComplete = false;
     this.onIntroComplete = null; // Callback fired after dark intro finishes
 
+    // Mobile performance flags
+    this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
+    this.dpr = this.isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : (window.devicePixelRatio || 1);
+
+    // Frame throttle for mobile (target ~30fps on mobile, 60fps on desktop)
+    this._lastFrame = 0;
+    this._frameInterval = this.isMobile ? 1000 / 30 : 0;
+
     this.initCanvasSize();
     this.generateBgStars();
     this.generateConstellationNodes();
@@ -43,16 +51,18 @@ class ConstellationCanvas {
   initCanvasSize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.canvas.width = this.width * window.devicePixelRatio;
-    this.canvas.height = this.height * window.devicePixelRatio;
+    this.canvas.width = this.width * this.dpr;
+    this.canvas.height = this.height * this.dpr;
     this.canvas.style.width = `${this.width}px`;
     this.canvas.style.height = `${this.height}px`;
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.ctx.scale(this.dpr, this.dpr);
   }
 
   generateBgStars() {
     this.bgStars = [];
-    const count = Math.min(260, Math.floor((this.width * this.height) / 3200));
+    // Mobile: far fewer stars so GPU doesn't choke
+    const maxStars = this.isMobile ? 90 : 220;
+    const count = Math.min(maxStars, Math.floor((this.width * this.height) / (this.isMobile ? 6000 : 3800)));
     for (let i = 0; i < count; i++) {
       const isSparkle = i % 7 === 0; // ~15% are golden/magenta 4-pointed diamond sparkles
       this.bgStars.push({
@@ -457,6 +467,15 @@ class ConstellationCanvas {
   }
 
   animate() {
+    const now = performance.now();
+    if (this.isMobile && this._frameInterval > 0) {
+      if (now - this._lastFrame < this._frameInterval) {
+        requestAnimationFrame(() => this.animate());
+        return;
+      }
+    }
+    this._lastFrame = now;
+
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     // Smooth Lerp Camera state for cinematic zoom into stars
@@ -522,13 +541,12 @@ class ConstellationCanvas {
       this.ctx.restore();
     }
 
-    // Swirling vibrant purple, magenta & golden nebula clouds (Smoothly animated fade-in)
-    if (this.nebulaAlpha > 0.005) {
+    // Nebula clouds — skip on mobile for performance
+    if (!this.isMobile && this.nebulaAlpha > 0.005) {
       this.ctx.save();
       this.ctx.globalCompositeOperation = 'screen';
       this.ctx.globalAlpha = this.nebulaAlpha * this.skyBlueProgress;
 
-      // Primary Violet Nebula
       const nebula1 = this.ctx.createRadialGradient(
         this.width * 0.45, this.height * 0.45, 20,
         this.width * 0.45, this.height * 0.45, this.width * 0.55
@@ -536,11 +554,9 @@ class ConstellationCanvas {
       nebula1.addColorStop(0, 'rgba(168, 85, 247, 0.28)');
       nebula1.addColorStop(0.5, 'rgba(147, 51, 234, 0.15)');
       nebula1.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
       this.ctx.fillStyle = nebula1;
       this.ctx.fillRect(0, 0, this.width, this.height);
 
-      // Accent Gold & Magenta Dust Cloud
       const nebula2 = this.ctx.createRadialGradient(
         this.width * 0.55, this.height * 0.55, 10,
         this.width * 0.55, this.height * 0.55, this.width * 0.4
@@ -548,7 +564,6 @@ class ConstellationCanvas {
       nebula2.addColorStop(0, 'rgba(251, 191, 36, 0.18)');
       nebula2.addColorStop(0.6, 'rgba(232, 121, 249, 0.12)');
       nebula2.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
       this.ctx.fillStyle = nebula2;
       this.ctx.fillRect(0, 0, this.width, this.height);
       this.ctx.restore();
@@ -559,8 +574,11 @@ class ConstellationCanvas {
     this.ctx.save();
     this.ctx.globalAlpha = alpha;
     this.ctx.fillStyle = color;
-    this.ctx.shadowColor = color;
-    this.ctx.shadowBlur = 10;
+    // Skip shadow on mobile — very expensive
+    if (!this.isMobile) {
+      this.ctx.shadowColor = color;
+      this.ctx.shadowBlur = 10;
+    }
     
     // Draw 4-point diamond star (✦) matching PKKMB reference
     this.ctx.beginPath();
@@ -684,15 +702,18 @@ class ConstellationCanvas {
     const currentX = from.x + (to.x - from.x) * factor;
     const currentY = from.y + (to.y - from.y) * factor;
 
-    // Glowing Purple -> Magenta -> Gold line gradient
-    const grad = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-    grad.addColorStop(0, 'rgba(192, 132, 252, 0.85)');
-    grad.addColorStop(0.5, 'rgba(232, 121, 249, 0.9)');
-    grad.addColorStop(1, 'rgba(251, 191, 36, 0.95)');
-
-    this.ctx.strokeStyle = grad;
-    this.ctx.shadowColor = '#c084fc';
-    this.ctx.shadowBlur = 10;
+    if (this.isMobile) {
+      // Mobile: simple single-color line, no gradient, no shadow
+      this.ctx.strokeStyle = 'rgba(192, 132, 252, 0.75)';
+    } else {
+      const grad = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+      grad.addColorStop(0, 'rgba(192, 132, 252, 0.85)');
+      grad.addColorStop(0.5, 'rgba(232, 121, 249, 0.9)');
+      grad.addColorStop(1, 'rgba(251, 191, 36, 0.95)');
+      this.ctx.strokeStyle = grad;
+      this.ctx.shadowColor = '#c084fc';
+      this.ctx.shadowBlur = 10;
+    }
 
     this.ctx.beginPath();
     this.ctx.moveTo(from.x, from.y);
@@ -715,24 +736,32 @@ class ConstellationCanvas {
       this.ctx.save();
       this.ctx.globalAlpha = star.fadeAlpha !== undefined ? star.fadeAlpha : 1;
 
-      // Outer Halo Glow (Gold & Purple celestial gradient)
-      const haloGrad = this.ctx.createRadialGradient(
-        star.x, star.y, radius * 0.2,
-        star.x, star.y, radius * (isHovered ? 4.8 : 3.0)
-      );
-      haloGrad.addColorStop(0, isHovered ? 'rgba(251, 191, 36, 0.98)' : 'rgba(254, 240, 138, 0.9)');
-      haloGrad.addColorStop(0.5, isHovered ? 'rgba(232, 121, 249, 0.6)' : 'rgba(168, 85, 247, 0.45)');
-      haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      if (this.isMobile) {
+        // Mobile: simple flat circle, no halo gradient, minimal shadow
+        this.ctx.fillStyle = isHovered ? '#fbbf24' : '#fffbeb';
+        if (isHovered) {
+          this.ctx.shadowColor = '#fbbf24';
+          this.ctx.shadowBlur = 10;
+        }
+      } else {
+        // Desktop: full halo gradient effect
+        const haloGrad = this.ctx.createRadialGradient(
+          star.x, star.y, radius * 0.2,
+          star.x, star.y, radius * (isHovered ? 4.8 : 3.0)
+        );
+        haloGrad.addColorStop(0, isHovered ? 'rgba(251, 191, 36, 0.98)' : 'rgba(254, 240, 138, 0.9)');
+        haloGrad.addColorStop(0.5, isHovered ? 'rgba(232, 121, 249, 0.6)' : 'rgba(168, 85, 247, 0.45)');
+        haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      this.ctx.fillStyle = haloGrad;
-      this.ctx.beginPath();
-      this.ctx.arc(star.x, star.y, radius * (isHovered ? 4.8 : 3.0), 0, Math.PI * 2);
-      this.ctx.fill();
+        this.ctx.fillStyle = haloGrad;
+        this.ctx.beginPath();
+        this.ctx.arc(star.x, star.y, radius * (isHovered ? 4.8 : 3.0), 0, Math.PI * 2);
+        this.ctx.fill();
 
-      // Core Solid Star
-      this.ctx.fillStyle = isHovered ? '#ffffff' : '#fffbeb';
-      this.ctx.shadowColor = isHovered ? '#fbbf24' : '#c084fc';
-      this.ctx.shadowBlur = isHovered ? 22 : 14;
+        this.ctx.fillStyle = isHovered ? '#ffffff' : '#fffbeb';
+        this.ctx.shadowColor = isHovered ? '#fbbf24' : '#c084fc';
+        this.ctx.shadowBlur = isHovered ? 22 : 14;
+      }
 
       this.ctx.beginPath();
       this.ctx.arc(star.x, star.y, Math.max(radius, 4), 0, Math.PI * 2);
@@ -780,13 +809,16 @@ class ConstellationCanvas {
             this.ctx.save();
             this.ctx.globalAlpha = alpha;
             const label = star.nickname || `${star.id}`;
-            this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)'; // Bright warm gold text
-            this.ctx.font = `600 ${this.width < 768 ? '8.5px' : '10px'} 'Outfit', sans-serif`;
-            this.ctx.shadowColor = '#c084fc';
-            this.ctx.shadowBlur = 8 * alpha;
+            this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)';
+            this.ctx.font = `600 ${this.isMobile ? '8px' : '10px'} 'Outfit', sans-serif`;
+            // Skip label shadow on mobile
+            if (!this.isMobile) {
+              this.ctx.shadowColor = '#c084fc';
+              this.ctx.shadowBlur = 8 * alpha;
+            }
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
-            const offsetY = (this.width < 768 ? 16 : 20) + (star.labelOffset || 0);
+            const offsetY = (this.isMobile ? 14 : 20) + (star.labelOffset || 0);
             this.ctx.fillText(label, star.x, star.y + offsetY);
             this.ctx.restore();
           }
