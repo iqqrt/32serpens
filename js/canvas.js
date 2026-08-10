@@ -37,9 +37,16 @@ class ConstellationCanvas {
     this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
     this.dpr = this.isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : (window.devicePixelRatio || 1);
 
-    // Frame throttle for mobile (target ~30fps on mobile, 60fps on desktop)
+    // Frame throttle for mobile (target ~30fps on mobile)
     this._lastFrame = 0;
     this._frameInterval = this.isMobile ? 1000 / 30 : 0;
+
+    // Dirty flag — stop rendering when nothing is animating
+    this._dirty = true;
+    this._idleTimer = null;
+
+    // Bind animate once to avoid per-frame arrow function allocation
+    this._animateBound = this.animate.bind(this);
 
     this.initCanvasSize();
     this.generateBgStars();
@@ -170,6 +177,8 @@ class ConstellationCanvas {
       return {
         ...maba,
         index: index,
+        startX: startX,
+        startY: startY,
         targetX: targetX,
         targetY: targetY,
         x: startX, // Starts at scattered location
@@ -266,7 +275,14 @@ class ConstellationCanvas {
     const star = this.stars[index];
     if (!star) return;
 
-    const targetScale = this.width < 768 ? 2.5 : 2.0;
+    // On mobile, keep camera fixed so modal opening is instant with zero stutter
+    if (this.isMobile) {
+      this.targetCamera = { x: 0, y: 0, scale: 1 };
+      this.markDirty();
+      return;
+    }
+
+    const targetScale = 2.0;
     const targetX = star.x - this.width / 2;
     const targetY = star.y - this.height / 2;
 
@@ -275,6 +291,7 @@ class ConstellationCanvas {
       y: targetY,
       scale: targetScale
     };
+    this.markDirty();
   }
 
   zoomOutToNormal() {
@@ -283,16 +300,17 @@ class ConstellationCanvas {
       y: 0,
       scale: 1
     };
+    this.markDirty();
   }
 
   /**
    * Phase 3 Animation:
-   * Nickname labels appear sequentially under each star like twinkling lights floating up into place
+   * Nickname labels appear sequentially under each star
    */
   animateLabelsFadeIn() {
     let start = null;
-    const stagger = 60; // 60ms delay per label
-    const duration = 450; // 450ms smooth fade per label
+    const stagger = this.isMobile ? 30 : 50;
+    const duration = this.isMobile ? 300 : 450;
 
     const step = (timestamp) => {
       if (!start) start = timestamp;
@@ -303,7 +321,6 @@ class ConstellationCanvas {
         const delay = i * stagger;
         if (elapsed >= delay) {
           const progress = Math.min((elapsed - delay) / duration, 1);
-          // Ease out cubic
           const ease = 1 - Math.pow(1 - progress, 3);
           this.stars[i].labelAlpha = ease;
           this.stars[i].labelOffset = 8 * (1 - ease);
@@ -312,6 +329,7 @@ class ConstellationCanvas {
           allDone = false;
         }
       }
+      this.markDirty();
 
       if (!allDone) {
         requestAnimationFrame(step);
@@ -322,19 +340,18 @@ class ConstellationCanvas {
 
   /**
    * Phase 2 Animation:
-   * Meditative Domino Wave effect: Star 1 moves, then star 2, star 3... slowly trailing into Serpens shape
+   * Domino Wave effect: Star 1 moves, then star 2, star 3... smoothly trailing into Serpens shape
    */
   animateDominoWaveFlyIn() {
     let flyStart = null;
-    const durationPerStar = 2800; // 2.8s extra smooth glide per star
-    const staggerDelay = 180; // 180ms gentle delay between each star starting movement
-    const totalFlyTime = (this.stars.length - 1) * staggerDelay + durationPerStar; // ~8.5s
+    const durationPerStar = this.isMobile ? 1200 : 2400; // Faster & snappier on mobile
+    const staggerDelay = this.isMobile ? 60 : 140;       // Shorter stagger delay on mobile
+    const totalFlyTime = (this.stars.length - 1) * staggerDelay + durationPerStar;
 
     const flyStep = (timestamp) => {
       if (!flyStart) flyStart = timestamp;
       const elapsed = timestamp - flyStart;
 
-      // Sync nebula glow buildup during star fly-in (0% to 55%)
       const flyProgress = Math.min(elapsed / totalFlyTime, 1);
       this.targetNebulaAlpha = 0.08 + flyProgress * 0.47;
 
@@ -346,19 +363,21 @@ class ConstellationCanvas {
 
         if (elapsed >= delay) {
           const starProgress = Math.min((elapsed - delay) / durationPerStar, 1);
-          // Smooth cubic ease-in-out curve
           const ease = starProgress < 0.5 
             ? 4 * starProgress * starProgress * starProgress 
             : 1 - Math.pow(-2 * starProgress + 2, 3) / 2;
 
-          star.x = star.x + (star.targetX - star.x) * ease;
-          star.y = star.y + (star.targetY - star.y) * ease;
+          // Pure lerp from fixed startX/startY to targetX/targetY (Fixes stuttering!)
+          star.x = star.startX + (star.targetX - star.startX) * ease;
+          star.y = star.startY + (star.targetY - star.startY) * ease;
 
           if (starProgress < 1) allArrived = false;
         } else {
           allArrived = false;
         }
       }
+
+      this.markDirty();
 
       if (!allArrived) {
         requestAnimationFrame(flyStep);
@@ -377,20 +396,18 @@ class ConstellationCanvas {
 
   animateLineConnection() {
     let start = null;
-    const duration = 3600; // 3.6 seconds drawing lines slowly & meditatively
+    const duration = this.isMobile ? 1200 : 3000;
 
     const step = (timestamp) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
       this.lineProgress = progress;
-
-      // Sync nebula glow buildup during line connection (55% to 100% peak at completion)
       this.targetNebulaAlpha = 0.55 + progress * 0.45;
+      this.markDirty();
 
       if (progress < 1) {
         requestAnimationFrame(step);
       } else {
-        // Animation fully complete — notify app.js
         this.targetNebulaAlpha = 1;
         if (this.onConstellationComplete) this.onConstellationComplete();
       }
@@ -437,7 +454,10 @@ class ConstellationCanvas {
         }
       }
 
-      this.hoveredStarIndex = foundIndex;
+      if (this.hoveredStarIndex !== foundIndex) {
+        this.hoveredStarIndex = foundIndex;
+        this.markDirty();
+      }
       this.canvas.style.cursor = foundIndex !== -1 ? 'pointer' : 'default';
     };
 
@@ -466,26 +486,58 @@ class ConstellationCanvas {
     }, { passive: true });
   }
 
+  // Mark canvas as needing a repaint
+  markDirty() {
+    this._dirty = true;
+    clearTimeout(this._idleTimer);
+    // On mobile, go idle after 3s of no changes (stars settled)
+    if (this.isMobile && this.introComplete) {
+      this._idleTimer = setTimeout(() => { this._dirty = false; }, 3000);
+    }
+  }
+
   animate() {
     const now = performance.now();
+
+    // Mobile frame throttle
     if (this.isMobile && this._frameInterval > 0) {
       if (now - this._lastFrame < this._frameInterval) {
-        requestAnimationFrame(() => this.animate());
+        requestAnimationFrame(this._animateBound);
         return;
       }
     }
     this._lastFrame = now;
 
+    // On mobile, skip rendering when idle (nothing is animating)
+    if (this.isMobile && !this._dirty && this.introComplete &&
+        this.lineProgress >= 1 && this.activePhase >= 3 &&
+        this.hoveredStarIndex === -1) {
+      requestAnimationFrame(this._animateBound);
+      return;
+    }
+
     this.ctx.clearRect(0, 0, this.width, this.height);
 
-    // Smooth Lerp Camera state for cinematic zoom into stars
-    const easeSpeed = 0.08;
-    this.camera.scale += (this.targetCamera.scale - this.camera.scale) * easeSpeed;
-    this.camera.x += (this.targetCamera.x - this.camera.x) * easeSpeed;
-    this.camera.y += (this.targetCamera.y - this.camera.y) * easeSpeed;
+    this._dirty = false; // Will be set true again if animations still running
 
-    // Smooth Lerp Nebula Glow Alpha (synced to constellation progress)
-    this.nebulaAlpha += (this.targetNebulaAlpha - this.nebulaAlpha) * 0.05;
+    // Smooth Lerp Camera
+    const easeSpeed = 0.08;
+    const scaleDiff = this.targetCamera.scale - this.camera.scale;
+    const xDiff = this.targetCamera.x - this.camera.x;
+    const yDiff = this.targetCamera.y - this.camera.y;
+    if (Math.abs(scaleDiff) > 0.001 || Math.abs(xDiff) > 0.1 || Math.abs(yDiff) > 0.1) {
+      this.camera.scale += scaleDiff * easeSpeed;
+      this.camera.x += xDiff * easeSpeed;
+      this.camera.y += yDiff * easeSpeed;
+      this._dirty = true;
+    }
+
+    // Smooth Lerp Nebula Glow Alpha
+    const nebulaDiff = this.targetNebulaAlpha - this.nebulaAlpha;
+    if (Math.abs(nebulaDiff) > 0.001) {
+      this.nebulaAlpha += nebulaDiff * 0.05;
+      this._dirty = true;
+    }
 
     // 1. Draw Deep Nebula Background (Screen Space)
     this.drawNebulaBackground();
@@ -510,7 +562,7 @@ class ConstellationCanvas {
     // Restore Screen Space Matrix
     this.ctx.restore();
 
-    requestAnimationFrame(() => this.animate());
+    requestAnimationFrame(this._animateBound);
   }
 
   drawNebulaBackground() {

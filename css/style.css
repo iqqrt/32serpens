@@ -1154,3 +1154,54 @@ html, body {
     bottom: 1.5rem;
   }
 }
+
+/* =============================================
+   MOBILE PERFORMANCE OVERRIDES
+   Remove GPU-heavy effects on small screens
+   ============================================= */
+@media (max-width: 767px) {
+  /* Kill backdrop-filter on modal — single biggest GPU killer */
+  .modal-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(5, 1, 18, 0.94) !important;
+    transition: opacity 0.15s ease !important;
+  }
+
+  .mentee-list-sheet {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(5, 1, 18, 0.97) !important;
+  }
+
+  /* Fast, crisp modal card entry without heavy 3D transform lerp */
+  .mentee-modal-card {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.8) !important;
+    transform: none !important;
+    transition: opacity 0.15s ease !important;
+  }
+
+  /* Remove filter blur from avatar glow */
+  .mentor-photo-glow {
+    display: none;
+  }
+
+  /* Disable CSS animations that run continuously */
+  .final-sparkle-row,
+  .final-stars-deco span,
+  .ending-hero-sub {
+    animation: none !important;
+  }
+
+  /* Disable infinite pulsing on idle elements */
+  .bottom-hint-text,
+  .ending-top-badge .sparkle {
+    animation: none !important;
+    opacity: 0.8;
+  }
+
+  /* Simpler scroll hint */
+  .scroll-down-hint {
+    animation: none !important;
+  }
+}
