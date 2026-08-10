@@ -422,8 +422,8 @@ class ConstellationCanvas {
 
     const getPos = (e) => {
       const rect = this.canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : 0));
+      const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : 0));
       
       const rawX = clientX - rect.left;
       const rawY = clientY - rect.top;
@@ -440,8 +440,7 @@ class ConstellationCanvas {
       const pos = getPos(e);
       let foundIndex = -1;
 
-      // Hitbox 25px around star for easy mobile tapping
-      const hitRadius = this.width < 768 ? 24 : 20;
+      const hitRadius = this.isMobile ? 36 : 24;
 
       for (let i = 0; i < this.stars.length; i++) {
         const star = this.stars[i];
@@ -461,8 +460,15 @@ class ConstellationCanvas {
 
     const handlePointerClick = (e) => {
       if (this.activePhase < 3) return;
+
+      // Ignore clicks on UI elements like modal or buttons
+      if (e.target && e.target.closest && (
+          e.target.closest('.icon-btn-minimal') || e.target.closest('.mentee-modal-card') ||
+          e.target.closest('.mentee-list-sheet') || e.target.closest('.btn-celestial') ||
+          e.target.closest('.ending-page') || e.target.closest('.modal-overlay'))) return;
+
       const pos = getPos(e);
-      const hitRadius = this.width < 768 ? 28 : 22;
+      const hitRadius = this.isMobile ? 36 : 24;
 
       for (let i = 0; i < this.stars.length; i++) {
         const star = this.stars[i];
@@ -479,11 +485,12 @@ class ConstellationCanvas {
       }
     };
 
-    this.canvas.addEventListener('mousemove', handlePointerMove);
-    this.canvas.addEventListener('click', handlePointerClick);
-    this.canvas.addEventListener('touchstart', (e) => {
-      handlePointerMove(e);
-      handlePointerClick(e);
+    window.addEventListener('mousemove', handlePointerMove);
+    window.addEventListener('click', handlePointerClick);
+    window.addEventListener('touchend', (e) => {
+      if (e.changedTouches && e.changedTouches[0]) {
+        handlePointerClick(e.changedTouches[0]);
+      }
     }, { passive: true });
   }
 
