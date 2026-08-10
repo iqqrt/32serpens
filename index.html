@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cluster 32 Serpens — Hadiah Spesial PKKMB Mentor</title>
+  <meta name="description" content="Persembahan rasi bintang Serpens PKKMB Cluster 32 untuk 33 Mahasiswa Baru luar biasa.">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Audio BGM Player -->
+  <audio id="bgmAudio" src="music/bgm.mp3" preload="auto" loop></audio>
+
+  <!-- Background Space Canvas -->
+  <canvas id="spaceCanvas"></canvas>
+
+  <!-- Main Web Overlay UI -->
+  <div id="appContainer">
+
+    <!-- Minimal Floating Action Button (Top Right Corner) -->
+    <div class="top-corner-actions">
+      <button id="soundToggleBtn" class="icon-btn-minimal" title="Musik Ambient">🔇</button>
+    </div>
+
+    <!-- Text Above Constellation (positioned dynamically by JS) -->
+    <div id="textAbove" class="text-above-constellation">
+      <!-- Phase 1: Quote -->
+      <div id="cardPhase1" class="story-phase">
+        <p id="quoteTextPhase1" class="main-quote typewriter-target"></p>
+      </div>
+
+      <!-- Phase 2: Quote -->
+      <div id="cardPhase2" class="story-phase">
+        <p id="quoteTextPhase2" class="main-quote typewriter-target"></p>
+      </div>
+
+      <!-- Phase 3: Title -->
+      <div id="cardPhase3" class="story-phase">
+        <h1 id="titlePhase3" class="main-title typewriter-target"></h1>
+      </div>
+    </div>
+
+    <!-- Button Below Constellation (positioned dynamically by JS) -->
+    <div id="belowConstellation" class="below-constellation" style="opacity: 0; pointer-events: none;">
+      <button id="btnStartPhase5" class="btn-celestial btn-small">
+        <span>Pesan Penutup</span>
+        <span class="icon">🌌</span>
+      </button>
+    </div>
+
+    <!-- Bottom Floating Hint Text -->
+    <p id="footerHint" class="bottom-hint-text">✨ ( Klik / sentuh di mana saja untuk mulai perjalanan )</p>
+
+  </div>
+
+  <!-- =====================================================
+       PHASE 5: Full Scroll Ending Page (Cinematic)
+       ===================================================== -->
+  <div id="endingPage" class="ending-page">
+
+    <!-- Section 0: Warp Transition Overlay -->
+    <div id="warpOverlay" class="warp-overlay">
+      <div class="warp-ring warp-ring-1"></div>
+      <div class="warp-ring warp-ring-2"></div>
+      <div class="warp-ring warp-ring-3"></div>
+      <div class="warp-ring warp-ring-4"></div>
+      <div class="warp-center-star">✦</div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div id="endingScrollContainer" class="ending-scroll-container">
+
+      <!-- Section 1: Hero Closing -->
+      <section class="ending-section-hero">
+        <div class="hero-stars-bg"></div>
+        <div class="ending-top-badge">
+          <span class="sparkle">✦</span>
+          <span>CLUSTER 32 SERPENS</span>
+          <span class="sparkle">✦</span>
+        </div>
+        <p class="ending-hero-sub">PENUTUPAN PKKMB 2026</p>
+        <h2 class="ending-hero-title reveal-up">
+          "Terima kasih sudah menjadi<br>bagian dari perjalanan ini."
+        </h2>
+        <p class="ending-hero-tagline reveal-up delay-1">
+          Sampai bertemu di cerita berikutnya ✦
+        </p>
+        <div class="scroll-down-hint reveal-up delay-2">
+          <span>↓ Gulir untuk melanjutkan</span>
+        </div>
+      </section>
+
+      <!-- Section 2: Mentor 1 (slide from left) -->
+      <section class="ending-section-mentor reveal-from-left" data-mentor="1">
+        <div class="mentor-section-inner">
+          <div class="mentor-photo-ring">
+            <img id="mentor1Img" src="" alt="Mentor 1" class="mentor-section-photo">
+            <div class="mentor-photo-glow"></div>
+          </div>
+          <div class="mentor-section-text">
+            <div class="mentor-label">✦ Kakak Mentor</div>
+            <h3 id="mentor1Name" class="mentor-section-name">Mentor 1</h3>
+            <p id="mentor1Role" class="mentor-section-role">Cluster 32 — Serpens</p>
+            <blockquote id="mentor1Message" class="mentor-section-quote"></blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Mentor 2 (slide from right) -->
+      <section class="ending-section-mentor reveal-from-right" data-mentor="2">
+        <div class="mentor-section-inner reverse">
+          <div class="mentor-photo-ring">
+            <img id="mentor2Img" src="" alt="Mentor 2" class="mentor-section-photo">
+            <div class="mentor-photo-glow"></div>
+          </div>
+          <div class="mentor-section-text">
+            <div class="mentor-label">✦ Kakak Co-Mentor</div>
+            <h3 id="mentor2Name" class="mentor-section-name">Mentor 2</h3>
+            <p id="mentor2Role" class="mentor-section-role">Cluster 32 — Serpens</p>
+            <blockquote id="mentor2Message" class="mentor-section-quote"></blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Credits Roll -->
+      <section class="ending-section-credits">
+        <div class="credits-header reveal-up">
+          <span class="sparkle">✦</span>
+          <h3>33 Bintang Cluster 32 Serpens</h3>
+          <span class="sparkle">✦</span>
+        </div>
+        <div id="creditsRoll" class="credits-roll">
+          <!-- Populated by JS from MABA_DATA -->
+        </div>
+      </section>
+
+      <!-- Section 5–9: 5 Documentation Photos (alternating L/R) -->
+      <section class="ending-section-photos">
+        <div class="photos-header reveal-up">
+          <span class="sparkle">📸</span>
+          <h3>Kenangan Bersama</h3>
+          <span class="sparkle">📸</span>
+        </div>
+        <div id="photoStrip" class="photo-strip">
+          <!-- Populated by JS from DOCUMENTATION_PHOTOS -->
+        </div>
+      </section>
+
+      <!-- Section 10: Final Closing -->
+      <section class="ending-section-final">
+        <div class="final-inner reveal-up">
+          <div class="final-sparkle-row">✦ ✦ ✦</div>
+          <h2 class="final-title">Cluster 32 Serpens</h2>
+          <p class="final-sub">PKKMB 2026 — Politeknik Negeri Media Kreatif</p>
+          <p class="final-tagline">
+            Seperti bintang-bintang Serpens yang selalu menghiasi langit malam,<br>
+            semoga kalian selalu bersinar di manapun kalian berada. 🌟
+          </p>
+          <div class="final-stars-deco">
+            <span>✦</span><span>⭐</span><span>✦</span><span>⭐</span><span>✦</span>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /ending-scroll-container -->
+  </div><!-- /endingPage -->
+
+  <!-- Mentee Individual Message Modal Dialog -->
+  <div id="menteeModal" class="modal-overlay" aria-hidden="true">
+    <div class="mentee-modal-card">
+      <div class="modal-bg-glow"></div>
+      <button id="modalCloseBtn" class="modal-close-btn" aria-label="Tutup">&times;</button>
+      
+      <div id="starNumberPill" class="star-number-pill">BINTANG #1 / 33</div>
+      <div id="menteeAvatar" class="mentee-avatar">🌟</div>
+      
+      <h2 id="menteeName" class="mentee-name">Nama Maba</h2>
+      <p id="menteeStarTitle" class="mentee-star-title">Alpha Serpentis (Unukalhai)</p>
+      
+      <div id="menteeMessageBox" class="mentee-message-box">
+        "Pesan ucapan hangat dari mentor..."
+      </div>
+
+      <!-- Modal Bottom Navigation Buttons -->
+      <div class="modal-nav">
+        <button id="prevMenteeBtn" class="nav-btn">
+          <span>&larr;</span> Sebelumnya
+        </button>
+        <button id="nextMenteeBtn" class="nav-btn">
+          Selanjutnya <span>&rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documentation Photo Lightbox Modal -->
+  <div id="photoModal" class="modal-overlay" aria-hidden="true">
+    <div class="photo-modal-card">
+      <button id="photoModalCloseBtn" class="modal-close-btn" aria-label="Tutup">&times;</button>
+      <img id="photoModalImg" src="" alt="Dokumentasi PKKMB" class="photo-modal-img">
+      <p id="photoModalCaption" class="photo-modal-caption"></p>
+    </div>
+  </div>
+
+  <!-- Mentee List & Search Overlay Sheet -->
+  <div id="menteeListSheet" class="mentee-list-sheet">
+    <div class="sheet-header">
+      <h3 class="sheet-title">Daftar 33 Star Maba</h3>
+      <button id="sheetCloseBtn" class="icon-btn-minimal">&times;</button>
+    </div>
+    
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari nama, panggilan, atau prodi...">
+    </div>
+
+    <div id="menteeGrid" class="mentee-grid"></div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/data.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
