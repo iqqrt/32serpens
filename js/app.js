@@ -396,8 +396,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const mentee = MABA_DATA[index];
     if (!mentee) return;
 
-    // Trigger space warp camera zoom into the clicked star
-    canvasEngine.zoomToStar(index);
+    // Pause canvas rendering on mobile when modal is open for 100% smooth UI response
+    if (canvasEngine.isMobile) {
+      canvasEngine.pauseAnimation = true;
+    } else {
+      canvasEngine.zoomToStar(index);
+    }
 
     starNumberPill.textContent = `BINTANG #${mentee.id} / 33`;
     menteeAvatar.style.background = mentee.avatarBg;
@@ -415,8 +419,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeMenteeModal() {
     menteeModal.classList.remove('active');
 
-    // Zoom camera back out to full constellation view
-    canvasEngine.zoomOutToNormal();
+    if (canvasEngine.isMobile) {
+      canvasEngine.pauseAnimation = false;
+      canvasEngine.markDirty();
+      canvasEngine.animate();
+    } else {
+      canvasEngine.zoomOutToNormal();
+    }
 
     // Check if we should show button after closing modal
     if (starClickCount >= 2 && currentPhase === 3) {

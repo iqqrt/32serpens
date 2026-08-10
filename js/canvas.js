@@ -35,11 +35,14 @@ class ConstellationCanvas {
 
     // Mobile performance flags
     this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
-    this.dpr = this.isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : (window.devicePixelRatio || 1);
+    this.dpr = this.isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2.0); // 1.0 on mobile for 60fps speed
 
-    // Frame throttle for mobile (target ~30fps on mobile)
+    // Frame throttle for mobile (~30-40fps target)
     this._lastFrame = 0;
-    this._frameInterval = this.isMobile ? 1000 / 30 : 0;
+    this._frameInterval = this.isMobile ? 1000 / 35 : 0;
+
+    // Pause canvas completely when modals are open
+    this.pauseAnimation = false;
 
     // Dirty flag — stop rendering when nothing is animating
     this._dirty = true;
@@ -497,6 +500,8 @@ class ConstellationCanvas {
   }
 
   animate() {
+    if (this.pauseAnimation) return;
+
     const now = performance.now();
 
     // Mobile frame throttle
@@ -644,10 +649,23 @@ class ConstellationCanvas {
   }
 
   drawBgStars() {
-    this.ctx.save();
+    if (this.isMobile) {
+      // Mobile ultra-fast single-path batch draw
+      this.ctx.save();
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+      this.ctx.beginPath();
+      for (let star of this.bgStars) {
+        if (star.revealAlpha <= 0) continue;
+        this.ctx.moveTo(star.x + star.radius, star.y);
+        this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      }
+      this.ctx.fill();
+      this.ctx.restore();
+      return;
+    }
 
+    this.ctx.save();
     for (let star of this.bgStars) {
-      // Skip completely hidden stars during intro
       if (star.revealAlpha <= 0) continue;
 
       star.alpha += star.twinkleSpeed * star.twinkleDir;
@@ -662,36 +680,30 @@ class ConstellationCanvas {
       const effectiveAlpha = star.alpha * star.revealAlpha;
 
       if (star.isSparkle) {
-        // Render 4-pointed golden/magenta diamond sparkle star
         this.drawDiamondSparkle(star.x, star.y, star.radius, effectiveAlpha, star.color);
       } else {
-        // Standard round particle star
         this.ctx.fillStyle = `rgba(255, 255, 255, ${effectiveAlpha})`;
         this.ctx.beginPath();
         this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         this.ctx.fill();
       }
     }
-
     this.ctx.restore();
   }
 
   /**
    * Intro Sequence:
    * Called when user clicks/taps screen for the first time.
-   * Sky turns deep royal purple → background stars fade in → 33 big stars fade in
    */
   startIntroSequence() {
     if (this.introStarted) return;
     this.introStarted = true;
 
-    const darkPauseDuration = 100;    // brief 0.1s delay
-    const totalRevealDuration = 2800; // 2.8s for background stars to gradually appear
-    const perStarFadeDuration = 800;  // Each individual star fades in over 0.8s
+    const darkPauseDuration = 100;
+    const totalRevealDuration = 2000;
+    const perStarFadeDuration = 600;
 
     const count = this.bgStars.length;
-
-    // Assign each star a random staggered reveal start time
     const revealDelays = this.bgStars.map(() =>
       darkPauseDuration + Math.random() * totalRevealDuration
     );
@@ -708,7 +720,6 @@ class ConstellationCanvas {
         const delay = revealDelays[i];
         if (elapsed >= delay) {
           const progress = Math.min((elapsed - delay) / perStarFadeDuration, 1);
-          // Ease out cubic for silky smooth fade
           const eased = 1 - Math.pow(1 - progress, 3);
           this.bgStars[i].revealAlpha = eased;
           if (progress < 1) allDone = false;
@@ -717,10 +728,11 @@ class ConstellationCanvas {
         }
       }
 
+      this.markDirty();
+
       if (!allDone) {
         requestAnimationFrame(step);
       } else {
-        // All bg stars revealed — now fire onIntroComplete for big star wave
         this.bgStars.forEach(s => s.revealAlpha = 1);
         if (this.onIntroComplete) this.onIntroComplete();
       }
@@ -731,11 +743,43 @@ class ConstellationCanvas {
 
   drawConstellationLines() {
     const totalLines = this.connections.length;
+    if (totalLines === 0 || this.lineProgress <= 0) return;
+
     const linesToDraw = Math.floor(totalLines * this.lineProgress);
     const partialProgress = (totalLines * this.lineProgress) % 1;
 
     this.ctx.save();
-    this.ctx.lineWidth = this.width < 768 ? 1.8 : 2.2;
+    this.ctx.lineWidth = this.isMobile ? 1.5 : 2.2;
+
+    if (this.isMobile) {
+      // Mobile: 1 single stroke draw call for ALL line segments
+      this.ctx.strokeStyle = 'rgba(192, 132, 252, 0.85)';
+      this.ctx.beginPath();
+      let started = false;
+
+      for (let i = 0; i < linesToDraw; i++) {
+        const conn = this.connections[i];
+        if (!started) {
+          this.ctx.moveTo(conn.from.x, conn.from.y);
+          started = true;
+        }
+        this.ctx.lineTo(conn.to.x, conn.to.y);
+      }
+
+      if (linesToDraw < totalLines) {
+        const conn = this.connections[linesToDraw];
+        if (!started) {
+          this.ctx.moveTo(conn.from.x, conn.from.y);
+        }
+        const currX = conn.from.x + (conn.to.x - conn.from.x) * partialProgress;
+        const currY = conn.from.y + (conn.to.y - conn.from.y) * partialProgress;
+        this.ctx.lineTo(currX, currY);
+      }
+
+      this.ctx.stroke();
+      this.ctx.restore();
+      return;
+    }
 
     for (let i = 0; i < linesToDraw; i++) {
       const conn = this.connections[i];
@@ -774,6 +818,39 @@ class ConstellationCanvas {
   }
 
   drawConstellationStars() {
+    if (this.isMobile) {
+      // Mobile: single-pass batch draw for all 33 constellation stars & labels
+      this.ctx.save();
+      this.ctx.fillStyle = '#fffbeb';
+      this.ctx.beginPath();
+      for (let i = 0; i < this.stars.length; i++) {
+        const star = this.stars[i];
+        const alpha = star.fadeAlpha !== undefined ? star.fadeAlpha : 1;
+        if (alpha <= 0) continue;
+        this.ctx.moveTo(star.x + star.baseRadius, star.y);
+        this.ctx.arc(star.x, star.y, star.baseRadius, 0, Math.PI * 2);
+      }
+      this.ctx.fill();
+
+      // Mobile labels
+      if (this.activePhase >= 3) {
+        this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)';
+        this.ctx.font = `600 8.5px 'Outfit', sans-serif`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        for (let i = 0; i < this.stars.length; i++) {
+          const star = this.stars[i];
+          const alpha = star.labelAlpha !== undefined ? star.labelAlpha : 0;
+          if (alpha > 0) {
+            const label = star.nickname || `${star.id}`;
+            this.ctx.fillText(label, star.x, star.y + 14);
+          }
+        }
+      }
+      this.ctx.restore();
+      return;
+    }
+
     const time = Date.now() * 0.003;
 
     for (let i = 0; i < this.stars.length; i++) {
