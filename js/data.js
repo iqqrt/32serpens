@@ -343,7 +343,7 @@ const MABA_DATA = [
 const MENTOR_DATA = [
   {
     id: 1,
-    name: "Mentor 1 (Nama Kakak Mentor)",
+    name: "Riski Raditiya (iqi)",
     role: "Mentor Cluster 32 - Serpens",
     message: "Untuk 33 adik-adikku yang luar biasa di Cluster 32, terima kasih sudah berjuang keras dan saling merangkul selama hari-hari PKKMB. Melihat kalian berkembang dan kompak adalah kebanggaan terbesar buat kakak. Jangan pernah ragu untuk mengejar mimpi kalian di kampus ini. Kakak selalu ada untuk kalian!",
     avatarBg: "linear-gradient(135deg, #fbbf24, #f59e0b)",
@@ -352,7 +352,7 @@ const MENTOR_DATA = [
   },
   {
     id: 2,
-    name: "Mentor 2 (Nama Kakak Co-Mentor)",
+    name: "Anggita Puspa Royanita(Gita)",
     role: "Mentor Cluster 32 - Serpens",
     message: "Selamat telah menyelesaikan hari PKKMB dengan senyuman dan kekompakan yang membanggakan! Cluster 32 Serpens ini bukan cuma sekadar kelompok PKKMB, tapi keluarga pertama kalian di kampus. Tetap jaga tali silaturahmi ini sampai kita wisuda nanti ya!",
     avatarBg: "linear-gradient(135deg, #a855f7, #ec4899)",

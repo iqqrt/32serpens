@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (phase === 3) {
       // Constellation revealed: Type "CLUSTER 32 SERPENS"
       showPhase(cardPhase3);
-      footerHint.textContent = '⭐ Klik titik bintang untuk melihat pesan Maba';
+      footerHint.textContent = '⭐ Klik titik bintang untuk melihat pesan dari kami';
       footerHint.style.opacity = '1';
 
       typeWriterText(titlePhase3, "CLUSTER 32 SERPENS", 65);
