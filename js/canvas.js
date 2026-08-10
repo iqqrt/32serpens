@@ -36,18 +36,17 @@ class ConstellationCanvas {
     this.introComplete = false;
     this.onIntroComplete = null; // Callback fired after dark intro finishes
 
-    // Mobile performance flags
+    // High quality visual flags
     this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
-    this.dpr = this.isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2.0); // 1.0 on mobile for 60fps speed
+    this.dpr = Math.min(window.devicePixelRatio || 1, 1.75); // Crisp high-definition DPR
 
-    // Frame throttle for mobile (~30-40fps target)
+    // Frame throttle
     this._lastFrame = 0;
-    this._frameInterval = this.isMobile ? 1000 / 35 : 0;
+    this._frameInterval = 0; // Smooth 60fps
 
-    // Pause canvas completely when modals are open
+    // Pause canvas when modals are active
     this.pauseAnimation = false;
 
-    // Dirty flag — stop rendering when nothing is animating
     this._dirty = true;
     this._idleTimer = null;
 
@@ -281,14 +280,7 @@ class ConstellationCanvas {
     const star = this.stars[index];
     if (!star) return;
 
-    // On mobile, keep camera fixed so modal opening is instant with zero stutter
-    if (this.isMobile) {
-      this.targetCamera = { x: 0, y: 0, scale: 1 };
-      this.markDirty();
-      return;
-    }
-
-    const targetScale = 2.0;
+    const targetScale = this.isMobile ? 1.8 : 2.2;
     const targetX = star.x - this.width / 2;
     const targetY = star.y - this.height / 2;
 
@@ -655,8 +647,8 @@ class ConstellationCanvas {
       this.ctx.restore();
     }
 
-    // Nebula clouds — skip on mobile for performance
-    if (!this.isMobile && this.nebulaAlpha > 0.005) {
+    // Swirling vibrant purple, magenta & golden nebula clouds
+    if (this.nebulaAlpha > 0.005) {
       this.ctx.save();
       this.ctx.globalCompositeOperation = 'screen';
       this.ctx.globalAlpha = this.nebulaAlpha * this.skyBlueProgress;
@@ -688,11 +680,8 @@ class ConstellationCanvas {
     this.ctx.save();
     this.ctx.globalAlpha = alpha;
     this.ctx.fillStyle = color;
-    // Skip shadow on mobile — very expensive
-    if (!this.isMobile) {
-      this.ctx.shadowColor = color;
-      this.ctx.shadowBlur = 10;
-    }
+    this.ctx.shadowColor = color;
+    this.ctx.shadowBlur = 10;
     
     // Draw 4-point diamond star (✦) matching PKKMB reference
     this.ctx.beginPath();
@@ -706,33 +695,8 @@ class ConstellationCanvas {
   }
 
   drawBgStars() {
-    const time = Date.now() * 0.002;
-
-    if (this.isMobile) {
-      // Mobile fast batched 3-phase twinkling stars (3 draw calls total)
-      this.ctx.save();
-      const phases = [0, 2.1, 4.2];
-
-      for (let p = 0; p < 3; p++) {
-        const alpha = 0.35 + Math.sin(time * 1.5 + phases[p]) * 0.3;
-        this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.12, alpha)})`;
-        this.ctx.beginPath();
-
-        for (let i = p; i < this.bgStars.length; i += 3) {
-          const star = this.bgStars[i];
-          if (star.revealAlpha <= 0) continue;
-          this.ctx.moveTo(star.x + star.radius, star.y);
-          this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        }
-        this.ctx.fill();
-      }
-
-      this.ctx.restore();
-      this._dirty = true;
-      return;
-    }
-
     this.ctx.save();
+
     for (let star of this.bgStars) {
       if (star.revealAlpha <= 0) continue;
 
@@ -756,6 +720,7 @@ class ConstellationCanvas {
         this.ctx.fill();
       }
     }
+
     this.ctx.restore();
   }
 
@@ -768,8 +733,8 @@ class ConstellationCanvas {
     this.introStarted = true;
 
     const darkPauseDuration = 100;
-    const totalRevealDuration = 2000;
-    const perStarFadeDuration = 600;
+    const totalRevealDuration = 2200;
+    const perStarFadeDuration = 700;
 
     const count = this.bgStars.length;
     const revealDelays = this.bgStars.map(() =>
@@ -817,37 +782,7 @@ class ConstellationCanvas {
     const partialProgress = (totalLines * this.lineProgress) % 1;
 
     this.ctx.save();
-    this.ctx.lineWidth = this.isMobile ? 1.5 : 2.2;
-
-    if (this.isMobile) {
-      // Mobile: 1 single stroke draw call for ALL line segments
-      this.ctx.strokeStyle = 'rgba(192, 132, 252, 0.85)';
-      this.ctx.beginPath();
-      let started = false;
-
-      for (let i = 0; i < linesToDraw; i++) {
-        const conn = this.connections[i];
-        if (!started) {
-          this.ctx.moveTo(conn.from.x, conn.from.y);
-          started = true;
-        }
-        this.ctx.lineTo(conn.to.x, conn.to.y);
-      }
-
-      if (linesToDraw < totalLines) {
-        const conn = this.connections[linesToDraw];
-        if (!started) {
-          this.ctx.moveTo(conn.from.x, conn.from.y);
-        }
-        const currX = conn.from.x + (conn.to.x - conn.from.x) * partialProgress;
-        const currY = conn.from.y + (conn.to.y - conn.from.y) * partialProgress;
-        this.ctx.lineTo(currX, currY);
-      }
-
-      this.ctx.stroke();
-      this.ctx.restore();
-      return;
-    }
+    this.ctx.lineWidth = this.isMobile ? 1.8 : 2.2;
 
     for (let i = 0; i < linesToDraw; i++) {
       const conn = this.connections[i];
@@ -866,18 +801,14 @@ class ConstellationCanvas {
     const currentX = from.x + (to.x - from.x) * factor;
     const currentY = from.y + (to.y - from.y) * factor;
 
-    if (this.isMobile) {
-      // Mobile: simple single-color line, no gradient, no shadow
-      this.ctx.strokeStyle = 'rgba(192, 132, 252, 0.75)';
-    } else {
-      const grad = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-      grad.addColorStop(0, 'rgba(192, 132, 252, 0.85)');
-      grad.addColorStop(0.5, 'rgba(232, 121, 249, 0.9)');
-      grad.addColorStop(1, 'rgba(251, 191, 36, 0.95)');
-      this.ctx.strokeStyle = grad;
-      this.ctx.shadowColor = '#c084fc';
-      this.ctx.shadowBlur = 10;
-    }
+    const grad = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+    grad.addColorStop(0, 'rgba(192, 132, 252, 0.85)');
+    grad.addColorStop(0.5, 'rgba(232, 121, 249, 0.9)');
+    grad.addColorStop(1, 'rgba(251, 191, 36, 0.95)');
+
+    this.ctx.strokeStyle = grad;
+    this.ctx.shadowColor = '#c084fc';
+    this.ctx.shadowBlur = 10;
 
     this.ctx.beginPath();
     this.ctx.moveTo(from.x, from.y);
@@ -886,38 +817,97 @@ class ConstellationCanvas {
   }
 
   drawConstellationStars() {
-    if (this.isMobile) {
-      // Mobile: single-pass batch draw for all 33 constellation stars & labels
+    const time = Date.now() * 0.003;
+
+    for (let i = 0; i < this.stars.length; i++) {
+      const star = this.stars[i];
+      const isHovered = i === this.hoveredStarIndex;
+      const isRevealedPhase = this.activePhase >= 3;
+
+      // Pulsing radius calculation
+      const pulse = Math.sin(time + star.pulseOffset) * 1.5;
+      const radius = isHovered ? star.baseRadius * 1.6 : star.baseRadius + (isRevealedPhase ? pulse : 0);
+
       this.ctx.save();
-      this.ctx.fillStyle = '#fffbeb';
+      this.ctx.globalAlpha = star.fadeAlpha !== undefined ? star.fadeAlpha : 1;
+
+      // Outer Halo Glow (Gold & Purple celestial gradient)
+      const haloGrad = this.ctx.createRadialGradient(
+        star.x, star.y, radius * 0.2,
+        star.x, star.y, radius * (isHovered ? 4.8 : 3.0)
+      );
+      haloGrad.addColorStop(0, isHovered ? 'rgba(251, 191, 36, 0.98)' : 'rgba(254, 240, 138, 0.9)');
+      haloGrad.addColorStop(0.5, isHovered ? 'rgba(232, 121, 249, 0.6)' : 'rgba(168, 85, 247, 0.45)');
+      haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+      this.ctx.fillStyle = haloGrad;
       this.ctx.beginPath();
-      for (let i = 0; i < this.stars.length; i++) {
-        const star = this.stars[i];
-        const alpha = star.fadeAlpha !== undefined ? star.fadeAlpha : 1;
-        if (alpha <= 0) continue;
-        this.ctx.moveTo(star.x + star.baseRadius, star.y);
-        this.ctx.arc(star.x, star.y, star.baseRadius, 0, Math.PI * 2);
-      }
+      this.ctx.arc(star.x, star.y, radius * (isHovered ? 4.8 : 3.0), 0, Math.PI * 2);
       this.ctx.fill();
 
-      // Mobile labels
-      if (this.activePhase >= 3) {
-        this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)';
-        this.ctx.font = `600 8.5px 'Outfit', sans-serif`;
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        for (let i = 0; i < this.stars.length; i++) {
-          const star = this.stars[i];
+      // Core Solid Star
+      this.ctx.fillStyle = isHovered ? '#ffffff' : '#fffbeb';
+      this.ctx.shadowColor = isHovered ? '#fbbf24' : '#c084fc';
+      this.ctx.shadowBlur = isHovered ? 22 : 14;
+
+      this.ctx.beginPath();
+      this.ctx.arc(star.x, star.y, Math.max(radius, 4), 0, Math.PI * 2);
+      this.ctx.fill();
+
+      // 4-Point Diamond Sparkle Flare on Hovered Stars
+      if (isHovered) {
+        this.drawDiamondSparkle(star.x, star.y, radius * 2.5, 0.95, '#fbbf24');
+      }
+
+      // Star Number Label & Hover Tooltip Pill (Phase 3+)
+      if (isRevealedPhase) {
+        if (isHovered) {
+          const badgeText = `${star.icon || '🌟'} #${star.id} ${star.nickname}`;
+          this.ctx.font = `700 ${this.isMobile ? '11px' : '12px'} 'Outfit', sans-serif`;
+          const textMetrics = this.ctx.measureText(badgeText);
+          const badgeW = textMetrics.width + 18;
+          const badgeH = 26;
+          const badgeX = star.x - badgeW / 2;
+          const badgeY = star.y - (this.isMobile ? 28 : 32);
+
+          this.ctx.fillStyle = 'rgba(24, 9, 48, 0.95)';
+          this.ctx.strokeStyle = '#fbbf24';
+          this.ctx.lineWidth = 1.5;
+          this.ctx.shadowColor = '#fbbf24';
+          this.ctx.shadowBlur = 14;
+
+          this.ctx.beginPath();
+          this.ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 13);
+          this.ctx.fill();
+          this.ctx.stroke();
+
+          this.ctx.fillStyle = '#ffffff';
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          this.ctx.shadowBlur = 0;
+          this.ctx.fillText(badgeText, star.x, badgeY + badgeH / 2);
+        } else {
           const alpha = star.labelAlpha !== undefined ? star.labelAlpha : 0;
           if (alpha > 0) {
+            this.ctx.save();
+            this.ctx.globalAlpha = alpha;
             const label = star.nickname || `${star.id}`;
-            this.ctx.fillText(label, star.x, star.y + 14);
+            this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)';
+            this.ctx.font = `600 ${this.isMobile ? '8.5px' : '10px'} 'Outfit', sans-serif`;
+            this.ctx.shadowColor = '#c084fc';
+            this.ctx.shadowBlur = 8 * alpha;
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            const offsetY = (this.isMobile ? 16 : 20) + (star.labelOffset || 0);
+            this.ctx.fillText(label, star.x, star.y + offsetY);
+            this.ctx.restore();
           }
         }
       }
+
       this.ctx.restore();
-      return;
     }
+  }
 
     const time = Date.now() * 0.003;
 
@@ -967,61 +957,6 @@ class ConstellationCanvas {
       // 4-Point Diamond Sparkle Flare on Hovered Stars
       if (isHovered) {
         this.drawDiamondSparkle(star.x, star.y, radius * 2.5, 0.95, '#fbbf24');
-      }
-
-      // Star Number Label & Hover Tooltip Pill (Phase 3+)
-      if (isRevealedPhase) {
-        if (isHovered) {
-          // Floating Tooltip Badge above star showing Nickname & Icon
-          const badgeText = `${star.icon || '🌟'} #${star.id} ${star.nickname}`;
-          this.ctx.font = `700 ${this.width < 768 ? '11px' : '12px'} 'Outfit', sans-serif`;
-          const textMetrics = this.ctx.measureText(badgeText);
-          const badgeW = textMetrics.width + 18;
-          const badgeH = 26;
-          const badgeX = star.x - badgeW / 2;
-          const badgeY = star.y - (this.width < 768 ? 28 : 32);
-
-          // Badge Background (Deep Royal Purple + Golden Border)
-          this.ctx.fillStyle = 'rgba(24, 9, 48, 0.95)';
-          this.ctx.strokeStyle = '#fbbf24';
-          this.ctx.lineWidth = 1.5;
-          this.ctx.shadowColor = '#fbbf24';
-          this.ctx.shadowBlur = 14;
-
-          this.ctx.beginPath();
-          this.ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 13);
-          this.ctx.fill();
-          this.ctx.stroke();
-
-          // Badge Text
-          this.ctx.fillStyle = '#ffffff';
-          this.ctx.textAlign = 'center';
-          this.ctx.textBaseline = 'middle';
-          this.ctx.shadowBlur = 0;
-          this.ctx.fillText(badgeText, star.x, badgeY + badgeH / 2);
-        } else {
-          // Animated short nickname label under star
-          const alpha = star.labelAlpha !== undefined ? star.labelAlpha : 0;
-          if (alpha > 0) {
-            this.ctx.save();
-            this.ctx.globalAlpha = alpha;
-            const label = star.nickname || `${star.id}`;
-            this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)';
-            this.ctx.font = `600 ${this.isMobile ? '8px' : '10px'} 'Outfit', sans-serif`;
-            // Skip label shadow on mobile
-            if (!this.isMobile) {
-              this.ctx.shadowColor = '#c084fc';
-              this.ctx.shadowBlur = 8 * alpha;
-            }
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            const offsetY = (this.isMobile ? 14 : 20) + (star.labelOffset || 0);
-            this.ctx.fillText(label, star.x, star.y + offsetY);
-            this.ctx.restore();
-          }
-        }
-      }
-
       this.ctx.restore();
     }
   }
