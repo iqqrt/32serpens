@@ -458,17 +458,24 @@ class ConstellationCanvas {
       this.canvas.style.cursor = foundIndex !== -1 ? 'pointer' : 'default';
     };
 
+    let lastTapTime = 0;
+
     const handlePointerClick = (e) => {
-      if (this.activePhase < 3) return;
+      const now = Date.now();
+      if (now - lastTapTime < 300) return; // Cooldown guard to prevent double firing on mobile
+      lastTapTime = now;
+
+      if (this.activePhase < 2) return;
 
       // Ignore clicks on UI elements like modal or buttons
-      if (e.target && e.target.closest && (
-          e.target.closest('.icon-btn-minimal') || e.target.closest('.mentee-modal-card') ||
-          e.target.closest('.mentee-list-sheet') || e.target.closest('.btn-celestial') ||
-          e.target.closest('.ending-page') || e.target.closest('.modal-overlay'))) return;
+      const targetEl = e.target || (e.srcElement);
+      if (targetEl && targetEl.closest && (
+          targetEl.closest('.icon-btn-minimal') || targetEl.closest('.mentee-modal-card') ||
+          targetEl.closest('.mentee-list-sheet') || targetEl.closest('.btn-celestial') ||
+          targetEl.closest('.ending-page') || targetEl.closest('.modal-overlay'))) return;
 
       const pos = getPos(e);
-      const hitRadius = this.isMobile ? 36 : 24;
+      const hitRadius = this.isMobile ? 40 : 24;
 
       for (let i = 0; i < this.stars.length; i++) {
         const star = this.stars[i];
@@ -486,12 +493,18 @@ class ConstellationCanvas {
     };
 
     window.addEventListener('mousemove', handlePointerMove);
-    window.addEventListener('click', handlePointerClick);
-    window.addEventListener('touchend', (e) => {
-      if (e.changedTouches && e.changedTouches[0]) {
-        handlePointerClick(e.changedTouches[0]);
+
+    window.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+        handlePointerClick(e);
       }
     }, { passive: true });
+
+    window.addEventListener('click', (e) => {
+      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') {
+        handlePointerClick(e);
+      }
+    });
   }
 
   // Mark canvas as needing a repaint
