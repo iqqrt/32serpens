@@ -37,9 +37,9 @@ class ConstellationCanvas {
     this.introComplete = false;
     this.onIntroComplete = null; // Callback fired after dark intro finishes
 
-    // High quality visual flags
+    // High quality visual flags & optimized DPR scaling for mobile GPUs
     this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
-    this.dpr = Math.min(window.devicePixelRatio || 1, 1.75); // Crisp high-definition DPR
+    this.dpr = this.isMobile ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 1.75);
 
     // Frame throttle
     this._lastFrame = 0;
@@ -820,6 +820,33 @@ class ConstellationCanvas {
     if (linesToDraw < totalLines) {
       const conn = this.connections[linesToDraw];
       this.drawLineSegment(conn.from, conn.to, partialProgress);
+      // Swirling vibrant purple, magenta & golden nebula clouds
+      if (this.nebulaAlpha > 0.005) {
+        this.ctx.save();
+        this.ctx.globalCompositeOperation = this.isMobile ? 'source-over' : 'screen';
+        this.ctx.globalAlpha = this.nebulaAlpha * this.skyBlueProgress;
+
+        const nebula1 = this.ctx.createRadialGradient(
+          this.width * 0.45, this.height * 0.45, 20,
+          this.width * 0.45, this.height * 0.45, this.width * 0.55
+        );
+        nebula1.addColorStop(0, 'rgba(168, 85, 247, 0.28)');
+        nebula1.addColorStop(0.5, 'rgba(147, 51, 234, 0.15)');
+        nebula1.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        this.ctx.fillStyle = nebula1;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+
+        const nebula2 = this.ctx.createRadialGradient(
+          this.width * 0.55, this.height * 0.55, 10,
+          this.width * 0.55, this.height * 0.55, this.width * 0.4
+        );
+        nebula2.addColorStop(0, 'rgba(251, 191, 36, 0.18)');
+        nebula2.addColorStop(0.6, 'rgba(232, 121, 249, 0.12)');
+        nebula2.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        this.ctx.fillStyle = nebula2;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.restore();
+      }
     }
 
     this.ctx.restore();
@@ -836,7 +863,7 @@ class ConstellationCanvas {
 
     this.ctx.strokeStyle = grad;
     this.ctx.shadowColor = '#c084fc';
-    this.ctx.shadowBlur = 10;
+    this.ctx.shadowBlur = this.isMobile ? 0 : 10;
 
     this.ctx.beginPath();
     this.ctx.moveTo(from.x, from.y);
@@ -876,7 +903,7 @@ class ConstellationCanvas {
       // Core Solid Star
       this.ctx.fillStyle = isHovered ? '#ffffff' : '#fffbeb';
       this.ctx.shadowColor = isHovered ? '#fbbf24' : '#c084fc';
-      this.ctx.shadowBlur = isHovered ? 22 : 14;
+      this.ctx.shadowBlur = this.isMobile ? (isHovered ? 6 : 0) : (isHovered ? 22 : 14);
 
       this.ctx.beginPath();
       this.ctx.arc(star.x, star.y, Math.max(radius, 4), 0, Math.PI * 2);
@@ -902,7 +929,7 @@ class ConstellationCanvas {
           this.ctx.strokeStyle = '#fbbf24';
           this.ctx.lineWidth = 1.5;
           this.ctx.shadowColor = '#fbbf24';
-          this.ctx.shadowBlur = 14;
+          this.ctx.shadowBlur = this.isMobile ? 4 : 14;
 
           this.ctx.beginPath();
           this.ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 13);
@@ -923,7 +950,7 @@ class ConstellationCanvas {
             this.ctx.fillStyle = 'rgba(254, 240, 138, 0.95)';
             this.ctx.font = `600 ${this.isMobile ? '8.5px' : '10px'} 'Outfit', sans-serif`;
             this.ctx.shadowColor = '#c084fc';
-            this.ctx.shadowBlur = 8 * alpha;
+            this.ctx.shadowBlur = this.isMobile ? 0 : 8 * alpha;
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
             const offsetY = (this.isMobile ? 16 : 20) + (star.labelOffset || 0);
