@@ -462,10 +462,10 @@ class ConstellationCanvas {
 
     const handlePointerClick = (e) => {
       const now = Date.now();
-      if (now - lastTapTime < 300) return; // Cooldown guard to prevent double firing on mobile
+      if (now - lastTapTime < 400) return; // 400ms cooldown guard prevents any double firing
       lastTapTime = now;
 
-      if (this.activePhase < 2) return;
+      if (this.activePhase < 3) return; // Star clicking active in Phase 3
 
       // Ignore clicks on UI elements like modal or buttons
       const targetEl = e.target || (e.srcElement);
@@ -475,7 +475,7 @@ class ConstellationCanvas {
           targetEl.closest('.ending-page') || targetEl.closest('.modal-overlay'))) return;
 
       const pos = getPos(e);
-      const hitRadius = this.isMobile ? 40 : 24;
+      const hitRadius = this.isMobile ? 38 : 24;
 
       for (let i = 0; i < this.stars.length; i++) {
         const star = this.stars[i];
@@ -496,14 +496,9 @@ class ConstellationCanvas {
 
     window.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-        handlePointerClick(e);
+        if (e.cancelable) e.preventDefault(); // Stop mobile browser from synthesizing duplicate click event!
       }
-    }, { passive: true });
-
-    window.addEventListener('click', (e) => {
-      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') {
-        handlePointerClick(e);
-      }
+      handlePointerClick(e);
     });
   }
 

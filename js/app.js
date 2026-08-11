@@ -348,10 +348,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // =============================================
   // Global Click Step Controller
   // =============================================
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.icon-btn-minimal') || e.target.closest('.mentee-modal-card') ||
-        e.target.closest('.mentee-list-sheet') || e.target.closest('.btn-celestial') ||
-        e.target.closest('.ending-page') || e.target.closest('.modal-overlay')) return;
+  let lastGlobalTapTime = 0;
+
+  function handleGlobalStep(e) {
+    const now = Date.now();
+    if (now - lastGlobalTapTime < 400) return; // 400ms guard stops double stepping
+    lastGlobalTapTime = now;
+
+    const targetEl = e.target || (e.srcElement);
+    if (targetEl && targetEl.closest && (
+        targetEl.closest('.icon-btn-minimal') || targetEl.closest('.mentee-modal-card') ||
+        targetEl.closest('.mentee-list-sheet') || targetEl.closest('.btn-celestial') ||
+        targetEl.closest('.ending-page') || targetEl.closest('.modal-overlay'))) return;
 
     if (currentPhase === 0) {
       // FIRST CLICK: Trigger audio immediately on direct user gesture!
@@ -371,6 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
       soundEngine.playStarClickSound();
       setPhase(2);
     }
+  }
+
+  window.addEventListener('pointerdown', (e) => {
+    handleGlobalStep(e);
   });
 
   // Phase 5 Button — launch cinematic ending
