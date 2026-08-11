@@ -345,22 +345,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundToggleBtn) soundToggleBtn.innerHTML = '🔊';
   }
 
-  // =============================================
-  // Global Click Step Controller
-  // =============================================
-  let lastGlobalTapTime = 0;
+  // Canvas Tap Callback for Story Step Progression
+  canvasEngine.onCanvasTapCallback = () => {
+    handleGlobalStep();
+  };
 
-  function handleGlobalStep(e) {
-    const now = Date.now();
-    if (now - lastGlobalTapTime < 400) return; // 400ms guard stops double stepping
-    lastGlobalTapTime = now;
-
-    const targetEl = e.target || (e.srcElement);
-    if (targetEl && targetEl.closest && (
-        targetEl.closest('.icon-btn-minimal') || targetEl.closest('.mentee-modal-card') ||
-        targetEl.closest('.mentee-list-sheet') || targetEl.closest('.btn-celestial') ||
-        targetEl.closest('.ending-page') || targetEl.closest('.modal-overlay'))) return;
-
+  function handleGlobalStep() {
     if (currentPhase === 0) {
       // FIRST CLICK: Trigger audio immediately on direct user gesture!
       tryAutoPlayBGM();
@@ -380,10 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setPhase(2);
     }
   }
-
-  window.addEventListener('pointerdown', (e) => {
-    handleGlobalStep(e);
-  });
 
   // Phase 5 Button — launch cinematic ending
   if (btnStartPhase5) {

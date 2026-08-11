@@ -18,6 +18,7 @@ class ConstellationCanvas {
 
     this.onStarClickCallback = null;
     this.onConstellationComplete = null;
+    this.onCanvasTapCallback = null;
 
     // Tap Shockwave Ripples
     this.ripples = [];
@@ -458,25 +459,25 @@ class ConstellationCanvas {
       this.canvas.style.cursor = foundIndex !== -1 ? 'pointer' : 'default';
     };
 
-    let lastTapTime = 0;
+    let lastCanvasTapTime = 0;
 
-    const handlePointerClick = (e) => {
+    const handleCanvasTap = (e) => {
       const now = Date.now();
-      if (now - lastTapTime < 400) return; // 400ms cooldown guard prevents any double firing
-      lastTapTime = now;
-
-      if (this.activePhase < 3) return; // Star clicking active in Phase 3
-
-      // Ignore clicks on UI elements like modal or buttons
-      const targetEl = e.target || (e.srcElement);
-      if (targetEl && targetEl.closest && (
-          targetEl.closest('.icon-btn-minimal') || targetEl.closest('.mentee-modal-card') ||
-          targetEl.closest('.mentee-list-sheet') || targetEl.closest('.btn-celestial') ||
-          targetEl.closest('.ending-page') || targetEl.closest('.modal-overlay'))) return;
+      if (now - lastCanvasTapTime < 350) return; // 350ms guard prevents double firing
+      lastCanvasTapTime = now;
 
       const pos = getPos(e);
-      const hitRadius = this.isMobile ? 38 : 24;
 
+      // In Phase 0, 1, 2: Canvas tap advances the story phase!
+      if (this.activePhase < 3) {
+        if (this.onCanvasTapCallback) {
+          this.onCanvasTapCallback();
+        }
+        return;
+      }
+
+      // In Phase 3: Check star collision
+      const hitRadius = this.isMobile ? 38 : 24;
       for (let i = 0; i < this.stars.length; i++) {
         const star = this.stars[i];
         const dist = Math.hypot(pos.x - star.x, pos.y - star.y);
@@ -487,19 +488,20 @@ class ConstellationCanvas {
           if (this.onStarClickCallback) {
             this.onStarClickCallback(star, i);
           }
-          break;
+          return;
         }
       }
     };
 
     window.addEventListener('mousemove', handlePointerMove);
 
-    window.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-        if (e.cancelable) e.preventDefault(); // Stop mobile browser from synthesizing duplicate click event!
+    // Bind touch/click listeners ONLY to the canvas element itself
+    this.canvas.addEventListener('click', handleCanvasTap);
+    this.canvas.addEventListener('touchend', (e) => {
+      if (e.changedTouches && e.changedTouches[0]) {
+        handleCanvasTap(e.changedTouches[0]);
       }
-      handlePointerClick(e);
-    });
+    }, { passive: true });
   }
 
   // Mark canvas as needing a repaint
