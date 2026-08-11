@@ -464,11 +464,19 @@ class ConstellationCanvas {
     const handleCanvasTap = (e) => {
       const now = Date.now();
       if (now - lastCanvasTapTime < 350) return; // 350ms guard prevents double firing
+
+      // Ignore taps on interactive UI overlays (modals, list sheet, action buttons)
+      const targetEl = e.target || (e.srcElement);
+      if (targetEl && targetEl.closest && (
+          targetEl.closest('.icon-btn-minimal') || targetEl.closest('.mentee-modal-card') ||
+          targetEl.closest('.mentee-list-sheet') || targetEl.closest('.btn-celestial') ||
+          targetEl.closest('.ending-page') || targetEl.closest('.modal-overlay'))) return;
+
       lastCanvasTapTime = now;
 
       const pos = getPos(e);
 
-      // In Phase 0, 1, 2: Canvas tap advances the story phase!
+      // In Phase 0, 1, 2: Tap advances the story phase!
       if (this.activePhase < 3) {
         if (this.onCanvasTapCallback) {
           this.onCanvasTapCallback();
@@ -476,8 +484,8 @@ class ConstellationCanvas {
         return;
       }
 
-      // In Phase 3: Check star collision
-      const hitRadius = this.isMobile ? 38 : 24;
+      // In Phase 3: Check star collision (45px hit radius on mobile)
+      const hitRadius = this.isMobile ? 45 : 24;
       for (let i = 0; i < this.stars.length; i++) {
         const star = this.stars[i];
         const dist = Math.hypot(pos.x - star.x, pos.y - star.y);
@@ -495,13 +503,16 @@ class ConstellationCanvas {
 
     window.addEventListener('mousemove', handlePointerMove);
 
-    // Bind touch/click listeners ONLY to the canvas element itself
-    this.canvas.addEventListener('click', handleCanvasTap);
-    this.canvas.addEventListener('touchend', (e) => {
-      if (e.changedTouches && e.changedTouches[0]) {
-        handleCanvasTap(e.changedTouches[0]);
+    // Attach to WINDOW so pointer-events: none wrappers on mobile never block touch interactions!
+    window.addEventListener('pointerdown', (e) => {
+      handleCanvasTap(e);
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.pointerType !== 'touch' && e.pointerType !== 'pen') {
+        handleCanvasTap(e);
       }
-    }, { passive: true });
+    });
   }
 
   // Mark canvas as needing a repaint
