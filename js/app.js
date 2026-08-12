@@ -61,21 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // =============================================
   function positionUIRelativeToConstellation() {
     const boxY = canvasEngine.boxY;
-    const boxH = canvasEngine.boxH;
+    if (boxY === undefined) return;
 
-    if (boxY === undefined || boxH === undefined) return;
-
-    // Text goes above the constellation with some padding
-    const aboveTop = Math.max(8, boxY - 12);
-    textAbove.style.bottom = 'auto';
-    textAbove.style.top = aboveTop + 'px';
-    // Align text to sit just above the box by anchoring from bottom
-    textAbove.style.top = '';
-    textAbove.style.bottom = (window.innerHeight - boxY + 10) + 'px';
-
-    // Button goes below the constellation
-    const belowTop = boxY + boxH + 16;
-    belowConstellation.style.top = belowTop + 'px';
+    // Anchor textAbove safely above constellation box if space permits
+    if (boxY > 120) {
+      textAbove.style.top = Math.max(16, boxY - 70) + 'px';
+    } else {
+      textAbove.style.top = '2rem';
+    }
   }
 
   positionUIRelativeToConstellation();
