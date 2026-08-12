@@ -348,7 +348,7 @@ const MENTOR_DATA = [
     message: "Untuk 33 adik-adikku yang luar biasa di Cluster 32, terima kasih sudah berjuang keras dan saling merangkul selama hari-hari PKKMB. Melihat kalian berkembang dan kompak adalah kebanggaan terbesar buat kakak. Jangan pernah ragu untuk mengejar mimpi kalian di kampus ini. Kakak selalu ada untuk kalian!",
     avatarBg: "linear-gradient(135deg, #fbbf24, #f59e0b)",
     icon: "👑",
-    photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+    photo: "img/mentor1.jpeg"
   },
   {
     id: 2,
