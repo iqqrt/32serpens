@@ -308,8 +308,8 @@ class ConstellationCanvas {
    */
   animateLabelsFadeIn() {
     let start = null;
-    const stagger = this.isMobile ? 30 : 50;
-    const duration = this.isMobile ? 300 : 450;
+    const stagger = this.isMobile ? 90 : 50; // Slower sequential wave of names on mobile
+    const duration = this.isMobile ? 700 : 450;
 
     const step = (timestamp) => {
       if (!start) start = timestamp;
@@ -343,8 +343,8 @@ class ConstellationCanvas {
    */
   animateDominoWaveFlyIn() {
     let flyStart = null;
-    const durationPerStar = this.isMobile ? 1200 : 2400; // Faster & snappier on mobile
-    const staggerDelay = this.isMobile ? 60 : 140;       // Shorter stagger delay on mobile
+    const durationPerStar = this.isMobile ? 2200 : 2400; // Elegant, graceful fly-in on mobile
+    const staggerDelay = this.isMobile ? 120 : 140;       
     const totalFlyTime = (this.stars.length - 1) * staggerDelay + durationPerStar;
 
     const flyStep = (timestamp) => {
@@ -394,7 +394,7 @@ class ConstellationCanvas {
 
   animateLineConnection() {
     let start = null;
-    const duration = this.isMobile ? 1200 : 3000;
+    const duration = this.isMobile ? 3500 : 3000; // 3.5s graceful line drawing on mobile
 
     const step = (timestamp) => {
       if (!start) start = timestamp;
