@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
     menteeAvatar.style.background = mentee.avatarBg;
     menteeAvatar.textContent = mentee.icon || '🌟';
     menteeName.textContent = mentee.name;
-    menteeStarTitle.textContent = `${mentee.starName} • Prodi ${mentee.prodi || 'PKKMB'}`;
+    menteeStarTitle.textContent = `Prodi ${mentee.prodi || 'PKKMB'}`;
     menteeMessageBox.textContent = `"${mentee.message}"`;
 
     prevMenteeBtn.disabled = index === 0;

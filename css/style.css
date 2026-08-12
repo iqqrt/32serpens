@@ -884,6 +884,7 @@ html, body {
 .mentee-modal-card {
   width: 90%;
   max-width: 440px;
+  max-height: 88vh;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-lg);
@@ -896,7 +897,7 @@ html, body {
   text-align: center;
   transform: scale(0.9) translateY(20px);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .modal-overlay.active .mentee-modal-card {
@@ -999,9 +1000,11 @@ html, body {
   color: #f5f3ff;
   margin-bottom: 1.5rem;
   z-index: 1;
-  max-height: 180px;
+  max-height: 220px;
   overflow-y: auto;
   text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(251, 191, 36, 0.4) transparent;
 }
 
 /* Modal Mentee Navigation Bar */
