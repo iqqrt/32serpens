@@ -320,23 +320,40 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // =============================================
-  // Auto-play BGM on first user interaction
+  // Auto-play BGM on first user interaction (100% Bulletproof Mobile Unlock)
   // =============================================
   let bgmStarted = false;
 
   function tryAutoPlayBGM() {
     if (bgmStarted) return;
-    bgmStarted = true;
 
-    // Init sound engine & play BGM
     soundEngine.init();
     soundEngine.isPlaying = true;
     soundEngine.playBGM();
     soundEngine.start();
 
-    // Update button to show playing state
-    if (soundToggleBtn) soundToggleBtn.innerHTML = '🔊';
+    const bgm = soundEngine.getBGM();
+    if (bgm && !bgm.paused) {
+      bgmStarted = true;
+      if (soundToggleBtn) soundToggleBtn.innerHTML = '🔊';
+    }
   }
+
+  // Bind to native touchstart, touchend, pointerdown, and click for instant mobile audio unlock
+  const mobileAudioEvents = ['touchstart', 'touchend', 'pointerdown', 'click'];
+  const unlockAudioListener = () => {
+    tryAutoPlayBGM();
+    const bgm = soundEngine.getBGM();
+    if (bgm && !bgm.paused) {
+      mobileAudioEvents.forEach(evt => {
+        window.removeEventListener(evt, unlockAudioListener);
+      });
+    }
+  };
+
+  mobileAudioEvents.forEach(evt => {
+    window.addEventListener(evt, unlockAudioListener, { passive: true });
+  });
 
   // Canvas Tap Callback for Story Step Progression
   canvasEngine.onCanvasTapCallback = () => {

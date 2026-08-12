@@ -22,11 +22,19 @@ class SoundEngine {
   }
 
   init() {
-    if (this.audioCtx) return;
+    if (this.audioCtx) {
+      if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+      return;
+    }
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) return;
 
     this.audioCtx = new AudioContext();
+    if (this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume();
+    }
     this.masterGain = this.audioCtx.createGain();
     this.masterGain.gain.setValueAtTime(0.05, this.audioCtx.currentTime);
     this.masterGain.connect(this.audioCtx.destination);
@@ -40,10 +48,12 @@ class SoundEngine {
   }
 
   playBGM() {
+    this.init();
     const bgm = this.getBGM();
     if (!bgm) return;
 
-    bgm.volume = 0.15; // Audible right away
+    bgm.muted = false;
+    bgm.volume = 0.4;
     const promise = bgm.play();
     if (promise !== undefined) {
       promise.then(() => {
