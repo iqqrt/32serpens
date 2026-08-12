@@ -281,7 +281,7 @@ class ConstellationCanvas {
     const star = this.stars[index];
     if (!star) return;
 
-    const targetScale = this.isMobile ? 1.8 : 2.2;
+    const targetScale = this.isMobile ? 2.6 : 2.2;
     const targetX = star.x - this.width / 2;
     const targetY = star.y - this.height / 2;
 

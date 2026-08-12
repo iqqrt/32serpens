@@ -404,12 +404,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mentee = MABA_DATA[index];
     if (!mentee) return;
 
-    // Pause canvas rendering on mobile when modal is open for 100% smooth UI response
-    if (canvasEngine.isMobile) {
-      canvasEngine.pauseAnimation = true;
-    } else {
-      canvasEngine.zoomToStar(index);
-    }
+    // Trigger smooth camera zoom into star on BOTH mobile and desktop!
+    canvasEngine.zoomToStar(index);
 
     starNumberPill.textContent = `BINTANG #${mentee.id} / 33`;
     menteeAvatar.style.background = mentee.avatarBg;
@@ -421,19 +417,19 @@ document.addEventListener('DOMContentLoaded', () => {
     prevMenteeBtn.disabled = index === 0;
     nextMenteeBtn.disabled = index === MABA_DATA.length - 1;
 
-    menteeModal.classList.add('active');
+    // On mobile, give a 200ms delay so user sees camera zoom dive into star before card pops up
+    if (canvasEngine.isMobile) {
+      setTimeout(() => {
+        menteeModal.classList.add('active');
+      }, 200);
+    } else {
+      menteeModal.classList.add('active');
+    }
   }
 
   function closeMenteeModal() {
     menteeModal.classList.remove('active');
-
-    if (canvasEngine.isMobile) {
-      canvasEngine.pauseAnimation = false;
-      canvasEngine.markDirty();
-      canvasEngine.animate();
-    } else {
-      canvasEngine.zoomOutToNormal();
-    }
+    canvasEngine.zoomOutToNormal();
 
     // Check if we should show button after closing modal
     if (starClickCount >= 2 && currentPhase === 3) {
