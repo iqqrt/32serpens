@@ -263,12 +263,12 @@ class ConstellationCanvas {
       this.stars.forEach(s => { s.labelAlpha = 0; s.labelOffset = 8; });
       this.generateConstellationNodes();
     } else if (phase === 1) {
-      this.targetNebulaAlpha = 0.2;
+      this.targetNebulaAlpha = 0.20;
     } else if (phase === 2) {
-      this.targetNebulaAlpha = 1;
+      this.targetNebulaAlpha = 0.20;
       this.animateDominoWaveFlyIn();
     } else if (phase === 3) {
-      this.targetNebulaAlpha = 1;
+      this.targetNebulaAlpha = 0.65;
       this.animateLabelsFadeIn();
     }
   }
@@ -352,7 +352,7 @@ class ConstellationCanvas {
       const elapsed = timestamp - flyStart;
 
       const flyProgress = Math.min(elapsed / totalFlyTime, 1);
-      this.targetNebulaAlpha = 0.08 + flyProgress * 0.47;
+      this.targetNebulaAlpha = 0.20 + flyProgress * 0.25; // Smooth rise from 0.20 to 0.45
 
       let allArrived = true;
 
@@ -401,13 +401,13 @@ class ConstellationCanvas {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
       this.lineProgress = progress;
-      this.targetNebulaAlpha = 0.55 + progress * 0.45;
+      this.targetNebulaAlpha = 0.45 + progress * 0.20; // Smooth rise from 0.45 to 0.65
       this.markDirty();
 
       if (progress < 1) {
         requestAnimationFrame(step);
       } else {
-        this.targetNebulaAlpha = 1;
+        this.targetNebulaAlpha = 0.65;
         if (this.onConstellationComplete) this.onConstellationComplete();
       }
     };
