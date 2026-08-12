@@ -817,33 +817,6 @@ class ConstellationCanvas {
     if (linesToDraw < totalLines) {
       const conn = this.connections[linesToDraw];
       this.drawLineSegment(conn.from, conn.to, partialProgress);
-      // Swirling vibrant purple, magenta & golden nebula clouds
-      if (this.nebulaAlpha > 0.005) {
-        this.ctx.save();
-        this.ctx.globalCompositeOperation = this.isMobile ? 'source-over' : 'screen';
-        this.ctx.globalAlpha = this.nebulaAlpha * this.skyBlueProgress;
-
-        const nebula1 = this.ctx.createRadialGradient(
-          this.width * 0.45, this.height * 0.45, 20,
-          this.width * 0.45, this.height * 0.45, this.width * 0.55
-        );
-        nebula1.addColorStop(0, 'rgba(168, 85, 247, 0.28)');
-        nebula1.addColorStop(0.5, 'rgba(147, 51, 234, 0.15)');
-        nebula1.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        this.ctx.fillStyle = nebula1;
-        this.ctx.fillRect(0, 0, this.width, this.height);
-
-        const nebula2 = this.ctx.createRadialGradient(
-          this.width * 0.55, this.height * 0.55, 10,
-          this.width * 0.55, this.height * 0.55, this.width * 0.4
-        );
-        nebula2.addColorStop(0, 'rgba(251, 191, 36, 0.18)');
-        nebula2.addColorStop(0.6, 'rgba(232, 121, 249, 0.12)');
-        nebula2.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        this.ctx.fillStyle = nebula2;
-        this.ctx.fillRect(0, 0, this.width, this.height);
-        this.ctx.restore();
-      }
     }
 
     this.ctx.restore();
