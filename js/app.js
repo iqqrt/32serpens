@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trigger smooth camera zoom into star on BOTH mobile and desktop!
     canvasEngine.zoomToStar(index);
 
-    starNumberPill.textContent = `BINTANG #${mentee.id} / 33`;
+    starNumberPill.textContent = `BINTANG #${mentee.id} / ${MABA_DATA.length}`;
     menteeAvatar.style.background = mentee.avatarBg;
     menteeAvatar.textContent = mentee.icon || '🌟';
     menteeName.textContent = mentee.name;

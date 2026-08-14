@@ -1,5 +1,5 @@
 /**
- * Data 33 Mahasiswa Baru (Maba) Cluster 32 - Serpens
+ * Data 27 Mahasiswa Baru (Maba) Cluster 32 - Serpens
  * Setiap objek merepresentasikan 1 titik bintang dalam rasi Serpens.
  * Mentor dapat dengan mudah mengedit nama, panggilan, prodi, pesan, dan foto/avatar di file ini.
  */
@@ -37,286 +37,236 @@ const MABA_DATA = [
   },
   {
     id: 4,
-    name: "VALENTINO FEBRYAN",
-    nickname: "Ryan",
-    prodi: "Seni Kuliner",
-    starName: "Delta Serpentis",
-    message: "Ryan, semangat koki masa depan! Semoga di prodi Seni Kuliner kamu bisa makin mengasah bakatmu dan sukses menciptakan kreasi-kreasi terbaik di kehidupanmu!",
-    avatarBg: "linear-gradient(135deg, #a855f7, #f472b6)",
-    icon: "🌟"
-  },
-  {
-    id: 5,
     name: "KHAIRA SHAFIYA ZAHWA",
     nickname: "Zahwa",
     prodi: "Teknik Grafika",
-    starName: "Epsilon Serpentis",
+    starName: "Delta Serpentis",
     message: "Zahwa, ketelitian dan semangatmu selama PKKMB bener-bener jempolan! Semoga sukses selalu di prodi Teknik Grafika dan kehidupannya kedepan ya!",
     avatarBg: "linear-gradient(135deg, #6b21a8, #c084fc)",
     icon: "🦅"
   },
   {
-    id: 6,
+    id: 5,
     name: "LIFARO AGANTA",
     nickname: "Faro",
     prodi: "Teknik Grafika",
-    starName: "Zeta Serpentis",
+    starName: "Epsilon Serpentis",
     message: "Faro, makasih ya udah selalu tanggap dan membantu teman-teman se-cluster. Semoga di prodi Teknik Grafika kamu makin bersinar dan berprestasi!",
     avatarBg: "linear-gradient(135deg, #8b5cf6, #fbbf24)",
     icon: "🪶"
   },
   {
-    id: 7,
+    id: 6,
     name: "ANGGITA SALMA KHAIRUNISA",
     nickname: "Gita",
     prodi: "Teknologi Rekayasa Pengemasan",
-    starName: "Eta Serpentis",
+    starName: "Zeta Serpentis",
     message: "Gita, keaktifan dan keceriaanmu bikin suasana kelompok selalu hangat. Semoga sukses di prodi TRP dan lancar selalu di perkuliahan & karirmu nanti!",
     avatarBg: "linear-gradient(135deg, #7e22ce, #e879f9)",
     icon: "👑"
   },
   {
-    id: 8,
+    id: 7,
     name: "SOFI PEBRIANTY",
     nickname: "Sofi",
     prodi: "Penerbitan",
-    starName: "Theta Serpentis (Alya)",
+    starName: "Eta Serpentis",
     message: "Sofi, antusiasme dan kerja kerasmu keren banget! Semoga di prodi Penerbitan kamu bisa terus berkarya, menerbitkan hal-hal hebat, dan meraih impianmu!",
     avatarBg: "linear-gradient(135deg, #c084fc, #fbbf24)",
     icon: "🌟"
   },
   {
-    id: 9,
-    name: "SALSABILA RAMADHANI",
-    nickname: "Salsa",
-    prodi: "Penerbitan",
-    starName: "Iota Serpentis",
-    message: "Salsa, pembawaan kamu yang tenang dan solutif ngebantu banget kelompok kita. Semoga sukses di prodi Penerbitan dan kehidupannya mendatang!",
-    avatarBg: "linear-gradient(135deg, #5b21b6, #e879f9)",
-    icon: "💫"
-  },
-  {
-    id: 10,
+    id: 8,
     name: "NERIA SITOMPUL",
     nickname: "Neria",
     prodi: "Desain Mode",
-    starName: "Kappa Serpentis",
+    starName: "Theta Serpentis (Alya)",
     message: "Neria, selera seni dan kreativitasmu luar biasa! Semoga di prodi Desain Mode kamu bisa melahirkan karya-karya fashion yang memukau dan sukses selalu!",
     avatarBg: "linear-gradient(135deg, #9333ea, #fbbf24)",
     icon: "🪶"
   },
   {
-    id: 11,
+    id: 9,
     name: "RIFALDY RIZKI RACHMAWAN",
     nickname: "Fadly",
     prodi: "Teknologi Permainan",
-    starName: "Lambda Serpentis",
+    starName: "Iota Serpentis",
     message: "Fadly, keren banget logika dan passionmu! Semoga di prodi Teknologi Permainan kamu bisa sukses mendevelop game-game hebat masa depan!",
     avatarBg: "linear-gradient(135deg, #7e22ce, #c084fc)",
     icon: "✨"
   },
   {
-    id: 12,
+    id: 10,
     name: "ADAM MUSYAFFA NUR FAHRUDIN",
     nickname: "Adam",
     prodi: "Teknologi Permainan",
-    starName: "Mu Serpentis",
+    starName: "Kappa Serpentis",
     message: "Adam, dedikasi dan kerja kerasmu pas tugas kelompok jempolan banget. Semoga sukses selalu di prodi Teknologi Permainan dan karirmu kedepannya!",
     avatarBg: "linear-gradient(135deg, #a855f7, #fbbf24)",
     icon: "🌟"
   },
   {
-    id: 13,
+    id: 11,
     name: "RIFAT SISWANTO",
     nickname: "Rifat",
     prodi: "Film & TV",
-    starName: "Nu Serpentis",
+    starName: "Lambda Serpentis",
     message: "Rifat, sineas masa depan! Semoga di prodi Film & TV karya-karyamu makin spektakuler dan sukses menghiasi layar kaca serta industri perfilman!",
     avatarBg: "linear-gradient(135deg, #5b21b6, #c084fc)",
     icon: "🦅"
   },
   {
-    id: 14,
+    id: 12,
     name: "RINJANI CAHYANINGTYAS",
     nickname: "Rinjani",
     prodi: "Film & TV",
-    starName: "Xi Serpentis",
+    starName: "Mu Serpentis",
     message: "Rinjani, kepekaan seni dan semangat berkaryamu bikin terpukau. Semoga perjalanan kuliah di prodi Film & TV penuh pengalaman berharga dan sukses!",
     avatarBg: "linear-gradient(135deg, #9333ea, #f472b6)",
     icon: "🪶"
   },
   {
-    id: 15,
+    id: 13,
     name: "ZAHIRA PUTRI ZAINDRA",
     nickname: "Zahira",
     prodi: "Desain Grafis",
-    starName: "Omicron Serpentis",
+    starName: "Nu Serpentis",
     message: "Zahira, estetika dan ketelitian visualmu keren banget! Semoga di prodi Desain Grafis kamu makin berkembang, berkarya hebat, dan sukses selalu!",
     avatarBg: "linear-gradient(135deg, #7e22ce, #fbbf24)",
     icon: "👑"
   },
   {
-    id: 16,
+    id: 14,
     name: "RAUDHAH NUR SALSABILLA",
     nickname: "Raudhah",
     prodi: "Desain Grafis",
-    starName: "Pi Serpentis",
+    starName: "Xi Serpentis",
     message: "Raudhah, terima kasih sudah selalu konsisten dan rajin membantu teman-teman. Semoga sukses di prodi Desain Grafis dan kehidupannya nanti!",
     avatarBg: "linear-gradient(135deg, #a855f7, #e879f9)",
     icon: "🌟"
   },
   {
-    id: 17,
+    id: 15,
     name: "NAUFAL IJLAL",
     nickname: "Naufal",
     prodi: "Desain Grafis",
-    starName: "Rho Serpentis",
+    starName: "Omicron Serpentis",
     message: "Naufal, jiwa kepemimpinan dan ide-ide kreatifmu luar biasa! Semoga di prodi Desain Grafis kamu makin bersinar dan terus berprestasi!",
     avatarBg: "linear-gradient(135deg, #5b21b6, #fbbf24)",
     icon: "🦅"
   },
   {
-    id: 18,
+    id: 16,
     name: "MUHAMMAD AFAN RIFADIN",
     nickname: "Afan",
     prodi: "Teknologi Rekayasa Multimedia",
-    starName: "Sigma Serpentis",
+    starName: "Pi Serpentis",
     message: "Afan, wawasan dan semangat inovasimu keren banget! Semoga di prodi TRM kamu bisa menguasai teknologi multimedia terkini dan sukses selalu!",
     avatarBg: "linear-gradient(135deg, #8b5cf6, #f472b6)",
     icon: "🪶"
   },
   {
-    id: 19,
-    name: "RAFFI AKMAL",
-    nickname: "Raffi",
-    prodi: "Teknologi Rekayasa Multimedia",
-    starName: "Tau Serpentis",
-    message: "Raffi, energi positifmu selalu membakar semangat se-cluster! Semoga di prodi TRM kamu makin ahli di bidang multimedia dan sukses terus!",
-    avatarBg: "linear-gradient(135deg, #7e22ce, #e879f9)",
-    icon: "✨"
-  },
-  {
-    id: 20,
+    id: 17,
     name: "KAYLA SAFA ALZENA",
     nickname: "Kayla",
     prodi: "Teknologi Rekayasa Multimedia",
-    starName: "Upsilon Serpentis",
+    starName: "Rho Serpentis",
     message: "Kayla, keramahan dan ketekunanmu bikin suasana kelompok sejuk. Semoga sukses selalu di prodi TRM dan kehidupannya mendatang!",
     avatarBg: "linear-gradient(135deg, #9333ea, #fbbf24)",
     icon: "🌟"
   },
   {
-    id: 21,
+    id: 18,
     name: "NAYSHILA MUSYFIKA HANDAYANI",
     nickname: "Nayshila",
     prodi: "Pengelolaan Perhotelan",
-    starName: "Phi Serpentis",
+    starName: "Sigma Serpentis",
     message: "Nayshila, hospitality dan keanggunan komunikasimu jempolan! Semoga di prodi Pengelolaan Perhotelan kamu sukses meraih karir terbaik!",
     avatarBg: "linear-gradient(135deg, #6b21a8, #c084fc)",
     icon: "🦅"
   },
   {
-    id: 22,
+    id: 19,
     name: "SITI AISYAH ANANDA DEVANTY",
     nickname: "Siti",
     prodi: "Pengelolaan Perhotelan",
-    starName: "Chi Serpentis",
+    starName: "Tau Serpentis",
     message: "Siti, kesabaran dan kebaikan hatimu bikin semua orang nyaman. Semoga sukses selalu di prodi Pengelolaan Perhotelan dan cita-citamu!",
     avatarBg: "linear-gradient(135deg, #a855f7, #fbbf24)",
     icon: "🪶"
   },
   {
-    id: 23,
+    id: 20,
     name: "AZIZAH",
     nickname: "Azizah",
     prodi: "Penyiaran",
-    starName: "Psi Serpentis",
+    starName: "Upsilon Serpentis",
     message: "Azizah, public speaking dan kehangatan bicaramu luar biasa! Semoga di prodi Penyiaran suara dan karyamu makin mengudara dengan sukses!",
     avatarBg: "linear-gradient(135deg, #7e22ce, #e879f9)",
     icon: "👑"
   },
   {
-    id: 24,
+    id: 21,
     name: "SALVINO GAVRILLA ARNOLDIE",
     nickname: "Salvino",
     prodi: "Penyiaran",
-    starName: "Omega Serpentis",
+    starName: "Phi Serpentis",
     message: "Salvino, percaya diri dan pesonamu di depan media keren banget! Semoga sukses selalu di prodi Penyiaran dan dunia broadcasting!",
     avatarBg: "linear-gradient(135deg, #5b21b6, #fbbf24)",
     icon: "🌟"
   },
   {
-    id: 25,
+    id: 22,
     name: "SYAHRA AISHA MARBUN",
     nickname: "Syahra",
     prodi: "Penyiaran",
-    starName: "Serpentis 59",
+    starName: "Chi Serpentis",
     message: "Syahra, antusiasme dan komunikasi komunikatifmu selalu menyenangkan. Semoga di prodi Penyiaran kamu makin berprestasi dan sukses!",
     avatarBg: "linear-gradient(135deg, #9333ea, #c084fc)",
     icon: "🦅"
   },
   {
-    id: 26,
+    id: 23,
     name: "ZENOBIA ABIMANYU",
     nickname: "Zeno",
     prodi: "Periklanan",
-    starName: "Serpentis 60",
+    starName: "Psi Serpentis",
     message: "Zeno, ide-ide segar dan daya analisismu out of the box! Semoga di prodi Periklanan kamu sukses menciptakan campaign-campaign legendaris!",
     avatarBg: "linear-gradient(135deg, #8b5cf6, #e879f9)",
     icon: "🪶"
   },
   {
-    id: 27,
-    name: "FAYYAZA AZWA ANANDITA PUTRI",
-    nickname: "Azwa",
-    prodi: "Periklanan",
-    starName: "Serpentis 61",
-    message: "Azwa, keceriaan dan kreativitasmu bikin penugasan terasa seru. Semoga di prodi Periklanan kamu makin cemerlang dan sukses terus!",
-    avatarBg: "linear-gradient(135deg, #7e22ce, #fbbf24)",
-    icon: "👑"
-  },
-  {
-    id: 28,
-    name: "NAURA SYIFA PRADINA",
-    nickname: "Naura",
-    prodi: "Periklanan",
-    starName: "Serpentis 62",
-    message: "Naura, kejelian dan kerapian kerjamu memuaskan banget. Semoga sukses selalu di prodi Periklanan dan perjalanan perkuliahanmu!",
-    avatarBg: "linear-gradient(135deg, #a855f7, #c084fc)",
-    icon: "✨"
-  },
-  {
-    id: 29,
+    id: 24,
     name: "MUHAMMAD TAUFIK AWALUDIN",
     nickname: "Taufik",
     prodi: "Fotografi",
-    starName: "Serpentis 64",
+    starName: "Omega Serpentis",
     message: "Taufik, jepretan visual dan sudut pandang estetikamu keren! Semoga di prodi Fotografi karya-karyamu makin diakui dan sukses selalu!",
     avatarBg: "linear-gradient(135deg, #5b21b6, #e879f9)",
     icon: "🦅"
   },
   {
-    id: 30,
+    id: 25,
     name: "ARKEY DWINUGRA HARYANTO",
     nickname: "Arkey",
     prodi: "Fotografi",
-    starName: "Gliese 710 (Serpens)",
+    starName: "Serpentis 59",
     message: "Arkey, ketelitian dan passion fotografimu luar biasa. Semoga di prodi Fotografi kamu bisa menangkap momen-momen indah terbaik!",
     avatarBg: "linear-gradient(135deg, #9333ea, #fbbf24)",
     icon: "🪶"
   },
   {
-    id: 31,
+    id: 26,
     name: "MUHAMMAD KIBAR SATRIA",
     nickname: "Satria",
     prodi: "Desain Grafis",
-    starName: "NN Serpentis",
+    starName: "Serpentis 60",
     message: "Satria, jiwa kesatria dan kreativitas desainmu keren banget! Semoga sukses selalu di prodi Desain Grafis dan terus berkarya!",
     avatarBg: "linear-gradient(135deg, #7e22ce, #c084fc)",
     icon: "🌟"
   },
   {
-    id: 32,
+    id: 27,
     name: "LULA NAZIRA ZULMA",
     nickname: "Lula",
     prodi: "Teknologi Rekayasa Multimedia",
@@ -324,16 +274,6 @@ const MABA_DATA = [
     message: "Lula, semangat dan sifat pantang menyerahmu sangat menginspirasi. Semoga di prodi TRM kamu makin sukses dan bersinar!",
     avatarBg: "linear-gradient(135deg, #a855f7, #e879f9)",
     icon: "✨"
-  },
-  {
-    id: 33,
-    name: "TYAS AYU RANIA PUTRI DIYA",
-    nickname: "Tyas",
-    prodi: "Penyiaran",
-    starName: "HD 155974 (Serpens Tail)",
-    message: "Tyas, pelengkap sempurna 33 bintang Cluster 32! Kehangatan dan semangat bicaramu bikin prodi Penyiaran & kehidupan perkuliahanmu makin cemerlang!",
-    avatarBg: "linear-gradient(135deg, #5b21b6, #fbbf24)",
-    icon: "👑"
   }
 ];
 
