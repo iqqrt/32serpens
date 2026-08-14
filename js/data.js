@@ -274,6 +274,36 @@ const MABA_DATA = [
     message: "Lula, semangat dan sifat pantang menyerahmu sangat menginspirasi. Semoga di prodi TRM kamu makin sukses dan bersinar!",
     avatarBg: "linear-gradient(135deg, #a855f7, #e879f9)",
     icon: "✨"
+  },
+  {
+    id: 28,
+    name: "FAHRI AULIA RAHMAN",
+    nickname: "Fahri",
+    prodi: "Penyiaran",
+    starName: "Serpentis 61",
+    message: "Fahri, semangat dan aura komunikatifmu luar biasa! Semoga di prodi Penyiaran karir dan karya penyiaranmu semakin mengudara dan sukses selalu!",
+    avatarBg: "linear-gradient(135deg, #7e22ce, #fbbf24)",
+    icon: "🎙️"
+  },
+  {
+    id: 29,
+    name: "DAFA ZULFAN HAMMANI",
+    nickname: "Dafa",
+    prodi: "Teknik Grafika",
+    starName: "Serpentis 62",
+    message: "Dafa, ketelitian dan kerja kerasmu di kelompok bener-bener jempolan! Semoga sukses selalu di prodi Teknik Grafika dan perkuliahanmu lancar!",
+    avatarBg: "linear-gradient(135deg, #9333ea, #e879f9)",
+    icon: "🖨️"
+  },
+  {
+    id: 30,
+    name: "RAMADHANI ILHAM",
+    nickname: "Ilham",
+    prodi: "Teknik Pemeliharaan Mesin",
+    starName: "Serpentis 64",
+    message: "Ilham, keteguhan dan daya juangmu luar biasa! Semoga di prodi Teknik Pemeliharaan Mesin kamu makin berprestasi dan sukses meraih cita-citamu!",
+    avatarBg: "linear-gradient(135deg, #5b21b6, #fbbf24)",
+    icon: "⚙️"
   }
 ];
 

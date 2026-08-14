@@ -99,38 +99,41 @@ class ConstellationCanvas {
   generateConstellationNodes() {
     const isPortrait = this.height > this.width;
 
-    // Define 27 relative normalized coordinates (0.0 - 1.0) forming Serpens
+    // Define 30 relative normalized coordinates (0.0 - 1.0) forming Serpens
     const relativeCoords = [
-      // === SERPENS CAPUT (Head & Upper Body - 12 Stars) ===
+      // === SERPENS CAPUT (Head & Upper Body - 13 Stars) ===
       { x: 0.35, y: 0.12 }, // Star 1 (Caput Top)
       { x: 0.28, y: 0.16 }, // Star 2 (Caput Left)
       { x: 0.42, y: 0.17 }, // Star 3 (Caput Right)
       { x: 0.22, y: 0.22 }, // Star 4 
       { x: 0.48, y: 0.23 }, // Star 5 
-      { x: 0.35, y: 0.26 }, // Star 6 (Unukalhai - Alpha Serpentis Heart)
-      { x: 0.28, y: 0.34 }, // Star 7
-      { x: 0.23, y: 0.42 }, // Star 8
-      { x: 0.27, y: 0.50 }, // Star 9
-      { x: 0.36, y: 0.55 }, // Star 10
-      { x: 0.48, y: 0.56 }, // Star 11 (Center Bridge)
-      { x: 0.60, y: 0.51 }, // Star 12
+      { x: 0.35, y: 0.26 }, // Star 6 (Unukalhai - Heart)
+      { x: 0.28, y: 0.33 }, // Star 7
+      { x: 0.23, y: 0.40 }, // Star 8
+      { x: 0.25, y: 0.47 }, // Star 9
+      { x: 0.31, y: 0.53 }, // Star 10
+      { x: 0.40, y: 0.56 }, // Star 11
+      { x: 0.50, y: 0.55 }, // Star 12 (Bridge)
+      { x: 0.60, y: 0.50 }, // Star 13
 
-      // === SERPENS CAUDA (Tail & Lower Body - 15 Stars) ===
-      { x: 0.70, y: 0.42 }, // Star 13
-      { x: 0.75, y: 0.34 }, // Star 14 (Cauda Upper Bend)
-      { x: 0.70, y: 0.28 }, // Star 15
-      { x: 0.60, y: 0.30 }, // Star 16
-      { x: 0.54, y: 0.38 }, // Star 17
-      { x: 0.53, y: 0.48 }, // Star 18
-      { x: 0.57, y: 0.58 }, // Star 19
-      { x: 0.64, y: 0.66 }, // Star 20
-      { x: 0.68, y: 0.74 }, // Star 21
-      { x: 0.63, y: 0.82 }, // Star 22 (Tail Curve)
-      { x: 0.52, y: 0.87 }, // Star 23
-      { x: 0.40, y: 0.85 }, // Star 24
-      { x: 0.30, y: 0.79 }, // Star 25
-      { x: 0.24, y: 0.72 }, // Star 26
-      { x: 0.20, y: 0.64 }  // Star 27 (Tail Tip)
+      // === SERPENS CAUDA (Tail & Lower Body - 17 Stars) ===
+      { x: 0.68, y: 0.43 }, // Star 14
+      { x: 0.74, y: 0.36 }, // Star 15
+      { x: 0.72, y: 0.29 }, // Star 16
+      { x: 0.63, y: 0.28 }, // Star 17
+      { x: 0.55, y: 0.34 }, // Star 18
+      { x: 0.53, y: 0.43 }, // Star 19
+      { x: 0.55, y: 0.52 }, // Star 20
+      { x: 0.60, y: 0.60 }, // Star 21
+      { x: 0.65, y: 0.68 }, // Star 22
+      { x: 0.68, y: 0.76 }, // Star 23
+      { x: 0.62, y: 0.83 }, // Star 24
+      { x: 0.52, y: 0.87 }, // Star 25
+      { x: 0.42, y: 0.86 }, // Star 26
+      { x: 0.33, y: 0.81 }, // Star 27
+      { x: 0.26, y: 0.74 }, // Star 28
+      { x: 0.21, y: 0.66 }, // Star 29
+      { x: 0.18, y: 0.58 }  // Star 30 (Tail Tip)
     ];
 
     // Maintain fixed aspect ratio box so geometry NEVER gets squished/gepeng
