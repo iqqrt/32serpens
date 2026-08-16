@@ -186,11 +186,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (media.type === 'video') {
             mediaContainer.innerHTML = `
-              <video src="${safeUrl}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline controls preload="metadata" style="cursor: pointer;"></video>
+              <div class="video-preview-wrapper" style="position: relative; width: 100%; height: 100%;">
+                <video src="${safeUrl}" class="photo-strip-img photo-strip-video" playsinline controls preload="metadata" style="cursor: pointer;"></video>
+                <div class="video-overlay-play-btn">
+                  <div class="play-btn-circle">
+                    <span style="font-size: 1.6rem; color: #070919; margin-left: 3px;">▶</span>
+                  </div>
+                  <span class="play-btn-text">Putar Video</span>
+                </div>
+              </div>
             `;
+
+            const overlayBtn = mediaContainer.querySelector('.video-overlay-play-btn');
             const vid = mediaContainer.querySelector('video');
-            if (vid) {
-              vid.play().catch(() => {});
+
+            if (overlayBtn && vid) {
+              overlayBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                overlayBtn.style.display = 'none';
+                vid.play().catch(() => {});
+              });
+              vid.addEventListener('pause', () => {
+                overlayBtn.style.display = 'flex';
+              });
+              vid.addEventListener('play', () => {
+                overlayBtn.style.display = 'none';
+              });
+              vid.addEventListener('ended', () => {
+                overlayBtn.style.display = 'flex';
+              });
             }
           } else {
             mediaContainer.innerHTML = `
