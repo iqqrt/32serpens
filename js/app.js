@@ -151,19 +151,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const dir = i % 2 === 0 ? 'from-left' : 'from-right';
         const item = document.createElement('div');
         item.className = `photo-strip-item ${dir}`;
-        item.style.cursor = 'pointer';
         
         let mediaHTML = '';
         if (album.type === 'video') {
           mediaHTML = `
-            <div class="photo-strip-img-wrap video-wrap" style="position: relative;">
+            <div class="photo-strip-img-wrap video-wrap" style="position: relative; cursor: pointer;">
               <video src="${album.url}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline></video>
-              <div class="video-play-badge">▶ 10s Video</div>
             </div>
           `;
         } else {
           mediaHTML = `
-            <div class="photo-strip-img-wrap">
+            <div class="photo-strip-img-wrap" style="cursor: pointer;">
               <img src="${album.url}" alt="${album.title}" class="photo-strip-img" loading="lazy">
             </div>
           `;
@@ -173,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         item.innerHTML = `
           ${mediaHTML}
-          <div class="photo-strip-caption">
+          <div class="photo-strip-caption" style="cursor: pointer;">
             <div class="photo-caption-num">0${i + 1}</div>
             <div class="photo-caption-title">${album.title}</div>
             <div class="photo-caption-text">${album.caption}</div>
@@ -181,24 +179,48 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
 
-        // Click event to open Lightbox Modal
-        item.addEventListener('click', () => {
+        const imgWrap = item.querySelector('.photo-strip-img-wrap');
+        const imgEl = item.querySelector('img');
+
+        // Photo 7-second auto-switch + click-to-next for card preview
+        if (album.items && album.items.length > 1) {
+          let currentCardIdx = 0;
+          let cardTimer = null;
+
+          function nextCardImage() {
+            currentCardIdx = (currentCardIdx + 1) % album.items.length;
+            const targetItem = album.items[currentCardIdx];
+            if (imgEl && targetItem.type === 'image') {
+              imgEl.src = targetItem.url;
+            }
+          }
+
+          function resetCardTimer() {
+            if (cardTimer) clearInterval(cardTimer);
+            cardTimer = setInterval(nextCardImage, 7000);
+          }
+
+          // Auto-slide every 7 seconds for photo cards
+          if (album.type === 'photo' || album.type === 'gallery') {
+            resetCardTimer();
+          }
+
+          // Clicking on image switches to next photo + resets 7s timer
+          if (imgWrap) {
+            imgWrap.addEventListener('click', (e) => {
+              e.stopPropagation();
+              nextCardImage();
+              resetCardTimer();
+            });
+          }
+        }
+
+        // Clicking on card caption opens full Lightbox Modal
+        item.querySelector('.photo-strip-caption').addEventListener('click', () => {
           openPhotoModal(album);
         });
 
         photoStrip.appendChild(item);
-
-        // Max 10-second loop control for preview video in card
-        if (album.type === 'video') {
-          const v = item.querySelector('video');
-          if (v) {
-            v.addEventListener('timeupdate', () => {
-              if (v.currentTime >= 10) {
-                v.currentTime = 0;
-              }
-            });
-          }
-        }
       });
     }
 
@@ -503,15 +525,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const photoModalGalleryNav = document.getElementById('photoModalGalleryNav');
   const photoModalCaption = document.getElementById('photoModalCaption');
 
-  let photoModalVideoTimeHandler = null;
+  let photoModalTimer = null;
+  let modalCurrentIdx = 0;
 
   function openPhotoModal(album) {
     if (!photoModal) return;
     soundEngine.playStarClickSound();
 
     const items = album.items || [{ type: album.type === 'video' ? 'video' : 'image', url: album.url, caption: album.caption }];
-    
+    modalCurrentIdx = 0;
+
+    function resetModalTimer() {
+      if (photoModalTimer) clearInterval(photoModalTimer);
+      const media = items[modalCurrentIdx];
+      // Only auto-slide for photo items
+      if (media && media.type === 'image' && items.length > 1) {
+        photoModalTimer = setInterval(() => {
+          modalCurrentIdx = (modalCurrentIdx + 1) % items.length;
+          setMediaItem(modalCurrentIdx);
+        }, 7000);
+      }
+    }
+
     function setMediaItem(itemIndex) {
+      modalCurrentIdx = itemIndex;
       const media = items[itemIndex];
       if (!media) return;
 
@@ -528,25 +565,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (media.type === 'video') {
+        if (photoModalTimer) clearInterval(photoModalTimer);
         if (photoModalImg) photoModalImg.style.display = 'none';
         if (photoModalVideo) {
           photoModalVideo.style.display = 'block';
           photoModalVideo.src = media.url;
           photoModalVideo.currentTime = 0;
           photoModalVideo.play().catch(() => {});
-
-          // Remove old listener if present
-          if (photoModalVideoTimeHandler) {
-            photoModalVideo.removeEventListener('timeupdate', photoModalVideoTimeHandler);
-          }
-
-          // Max 10-second loop control for video
-          photoModalVideoTimeHandler = () => {
-            if (photoModalVideo.currentTime >= 10) {
-              photoModalVideo.currentTime = 0;
-            }
-          };
-          photoModalVideo.addEventListener('timeupdate', photoModalVideoTimeHandler);
         }
       } else {
         if (photoModalVideo) {
@@ -557,7 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
           photoModalImg.style.display = 'block';
           photoModalImg.src = media.url;
           photoModalImg.alt = media.caption || album.caption;
+          photoModalImg.style.cursor = 'pointer';
         }
+        resetModalTimer();
       }
     }
 
@@ -582,12 +609,34 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Click on photo in modal advances to next photo + resets 7s timer
+    if (photoModalImg) {
+      photoModalImg.onclick = () => {
+        if (items.length > 1) {
+          modalCurrentIdx = (modalCurrentIdx + 1) % items.length;
+          setMediaItem(modalCurrentIdx);
+        }
+      };
+    }
+
+    // Click on video in modal toggles play/pause
+    if (photoModalVideo) {
+      photoModalVideo.onclick = () => {
+        if (photoModalVideo.paused) {
+          photoModalVideo.play();
+        } else {
+          photoModalVideo.pause();
+        }
+      };
+    }
+
     setMediaItem(0);
     photoModal.classList.add('active');
   }
 
   function closePhotoModal() {
     if (!photoModal) return;
+    if (photoModalTimer) clearInterval(photoModalTimer);
     photoModal.classList.remove('active');
     if (photoModalVideo) {
       photoModalVideo.pause();
