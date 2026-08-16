@@ -379,6 +379,7 @@ const DOCUMENTATION_PHOTOS = [
   {
     type: "gallery",
     title: "SEE YOUU GUYS",
+    isPortrait: true,
     items: [
       { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersama 3.jpeg" },
       { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersama sama 3.jpeg" },

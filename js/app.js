@@ -149,8 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
       photoStrip.innerHTML = '';
       DOCUMENTATION_PHOTOS.forEach((album, i) => {
         const dir = i % 2 === 0 ? 'from-left' : 'from-right';
+        const isPortraitClass = album.isPortrait ? 'portrait-card' : '';
         const item = document.createElement('div');
-        item.className = `photo-strip-item ${dir}`;
+        item.className = `photo-strip-item ${dir} ${isPortraitClass}`.trim();
         
         const items = album.items || [{ type: album.type === 'video' ? 'video' : 'image', url: album.url }];
         let currentItemIdx = 0;

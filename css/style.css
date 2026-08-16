@@ -819,6 +819,18 @@ html, body {
   text-shadow: 0 0 15px rgba(192,132,252,0.3);
 }
 
+/* Portrait Media Card Modifier for SEE YOU GUYS */
+.photo-strip-item.portrait-card .photo-strip-img-wrap {
+  flex: 0 0 42%;
+  max-width: 380px;
+}
+
+.photo-strip-item.portrait-card .photo-strip-img,
+.photo-strip-item.portrait-card video {
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
 @media (max-width: 640px) {
   .photo-strip-item,
   .photo-strip-item.from-right {
@@ -826,6 +838,11 @@ html, body {
     gap: 1.25rem;
   }
   .photo-strip-img-wrap { flex: unset; width: 100%; }
+  .photo-strip-item.portrait-card .photo-strip-img-wrap {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .photo-strip-caption,
   .photo-strip-item.from-right .photo-strip-caption { text-align: center; }
 }
