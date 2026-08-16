@@ -335,65 +335,57 @@ const DOCUMENTATION_PHOTOS = [
   {
     type: "photo",
     title: "Foto Kerkom Day 1",
-    url: "dokumentasi/foto/desain awal  day 1.jpeg",
     items: [
-      { type: "image", url: "dokumentasi/foto/desain awal  day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/lapor kerkom day 1.jpeg" }
+      { type: "image", url: "dokumentasi/foto/day 1/desain awal  day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 1/foto bersama day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 1/foto bersama1 day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 1/foto bersama2 day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 1/lapor kerkom day 1.jpeg" }
     ]
   },
   {
     type: "video",
     title: "Video Kerkom Day 1",
-    url: "dokumentasi/video/yel yel day 1.mp4",
     items: [
-      { type: "video", url: "dokumentasi/video/yel yel day 1.mp4" },
-      { type: "video", url: "dokumentasi/video/nopal santai day 1.mp4" },
-      { type: "video", url: "dokumentasi/video/parodi dilan day 1.mp4" },
-      { type: "video", url: "dokumentasi/video/mileaaa? day 1.mp4" }
+      { type: "video", url: "dokumentasi/video/day 1/awal Lukis day 1 .mp4" },
+      { type: "video", url: "dokumentasi/video/day 1/nopal santai day 1.mp4" },
+      { type: "video", url: "dokumentasi/video/day 1/parodi dilan day 1.mp4" },
+      { type: "video", url: "dokumentasi/video/day 1/yel yel day 1.mp4" }
     ]
   },
   {
     type: "photo",
     title: "Foto Kerkom Day 2",
-    url: "dokumentasi/foto/awal daday day 2.jpeg",
     items: [
-      { type: "image", url: "dokumentasi/foto/awal daday day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/cat abis woi day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/all base abiss day 2.jpeg" }
+      { type: "image", url: "dokumentasi/foto/day 2/awal daday day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 2/cat abis woi day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 2/all base abiss day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 2/fotobersama day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 2/WhatsApp Image 2026-08-16 at 8.53.37 PM.jpeg" },
+      { type: "image", url: "dokumentasi/foto/day 2/WhatsApp Image 2026-08-16 at 8.55.58 PM.jpeg" }
     ]
   },
   {
     type: "video",
     title: "Video Kerkom Day 2",
-    url: "dokumentasi/video/mulqi mulai day 2.mp4",
     items: [
-      { type: "video", url: "dokumentasi/video/mulqi mulai day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/cat abis day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/ngecat day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/ngecat 2 day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/pegang kayu day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/before pegal day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/pegel day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/tambah sedikit day 2.mp4" }
+      { type: "video", url: "dokumentasi/video/day 2/mulqi mulai day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/day 2/before pegal day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/day 2/pegel day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/day 2/tambah sedikit day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/day 2/logistik pulang day 2.mp4" }
     ]
   },
   {
     type: "gallery",
     title: "SEE YOUU GUYS",
-    url: "dokumentasi/foto/fotobersama day 2.jpeg",
     items: [
-      { type: "image", url: "dokumentasi/foto/fotobersama 3.jpeg" },
-      { type: "image", url: "dokumentasi/foto/fotobersama sama 3.jpeg" },
-      { type: "image", url: "dokumentasi/foto/fotobersamaa 3.jpeg" },
-      { type: "video", url: "dokumentasi/video/welove day 2 3.mp4" },
-      { type: "video", url: "dokumentasi/video/bersama tagline day 2 3.mp4" },
-      { type: "video", url: "dokumentasi/video/ipal yolo day  2 3.mp4" },
-      { type: "image", url: "dokumentasi/foto/fotobersama day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/foto bersama day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/foto bersama1 day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/foto bersama2 day 1.jpeg" },
-      { type: "video", url: "dokumentasi/video/awal Lukis day 1 .mp4" },
-      { type: "video", url: "dokumentasi/video/logistik pulang day 2.mp4" }
+      { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersama 3.jpeg" },
+      { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersama sama 3.jpeg" },
+      { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersamaa 3.jpeg" },
+      { type: "video", url: "dokumentasi/video/SEE YOU GUYS/welove day 2 3.mp4" },
+      { type: "video", url: "dokumentasi/video/SEE YOU GUYS/bersama tagline day 2 3.mp4" },
+      { type: "video", url: "dokumentasi/video/SEE YOU GUYS/ipal yolo day  2 3.mp4" }
     ]
   }
 ];

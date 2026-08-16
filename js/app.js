@@ -182,13 +182,19 @@ document.addEventListener('DOMContentLoaded', () => {
             counterBadge.textContent = `${currentItemIdx + 1} / ${items.length}`;
           }
 
+          const safeUrl = encodeURI(media.url);
+
           if (media.type === 'video') {
             mediaContainer.innerHTML = `
-              <video src="${media.url}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline controls style="cursor: pointer;"></video>
+              <video src="${safeUrl}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline controls preload="metadata" style="cursor: pointer;"></video>
             `;
+            const vid = mediaContainer.querySelector('video');
+            if (vid) {
+              vid.play().catch(() => {});
+            }
           } else {
             mediaContainer.innerHTML = `
-              <img src="${media.url}" alt="${album.title}" class="photo-strip-img" loading="lazy" style="cursor: pointer;">
+              <img src="${safeUrl}" alt="${album.title}" class="photo-strip-img" loading="lazy" style="cursor: pointer;">
             `;
           }
 
