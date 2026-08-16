@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Populate photo strip (5 documentation albums: Foto Day 1, Foto Day 2, Video Day 1, Video Day 2, Foto & Video Bersama)
+    // Populate photo strip (5 documentation albums: Foto Kerkom Day 1, Video Kerkom Day 1, Foto Kerkom Day 2, Video Kerkom Day 2, SEE YOUU GUYS)
     const photoStrip = document.getElementById('photoStrip');
     if (photoStrip && typeof DOCUMENTATION_PHOTOS !== 'undefined') {
       photoStrip.innerHTML = '';
@@ -152,74 +152,97 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = document.createElement('div');
         item.className = `photo-strip-item ${dir}`;
         
-        let mediaHTML = '';
-        if (album.type === 'video') {
-          mediaHTML = `
-            <div class="photo-strip-img-wrap video-wrap" style="position: relative; cursor: pointer;">
-              <video src="${album.url}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline></video>
-            </div>
-          `;
-        } else {
-          mediaHTML = `
-            <div class="photo-strip-img-wrap" style="cursor: pointer;">
-              <img src="${album.url}" alt="${album.title}" class="photo-strip-img" loading="lazy">
-            </div>
-          `;
-        }
-
-        const countText = album.items ? `${album.items.length} file` : '';
+        const items = album.items || [{ type: album.type === 'video' ? 'video' : 'image', url: album.url }];
+        let currentItemIdx = 0;
+        let autoTimer = null;
 
         item.innerHTML = `
-          ${mediaHTML}
-          <div class="photo-strip-caption" style="cursor: pointer;">
+          <div class="photo-strip-img-wrap">
+            <div class="inline-media-container" style="position: relative; width: 100%; height: 100%;"></div>
+            ${items.length > 1 ? `<button class="inline-nav-arrow prev-arrow" aria-label="Sebelumnya">‹</button>` : ''}
+            ${items.length > 1 ? `<button class="inline-nav-arrow next-arrow" aria-label="Selanjutnya">›</button>` : ''}
+            ${items.length > 1 ? `<div class="inline-counter-badge">1 / ${items.length}</div>` : ''}
+          </div>
+          <div class="photo-strip-caption">
             <div class="photo-caption-num">0${i + 1}</div>
             <div class="photo-caption-title">${album.title}</div>
-            <div class="photo-caption-text">${album.caption}</div>
-            <div class="photo-caption-hint">✨ Klik untuk buka galeri ${countText}</div>
           </div>
         `;
 
-        const imgWrap = item.querySelector('.photo-strip-img-wrap');
-        const imgEl = item.querySelector('img');
+        const mediaContainer = item.querySelector('.inline-media-container');
+        const prevBtn = item.querySelector('.prev-arrow');
+        const nextBtn = item.querySelector('.next-arrow');
+        const counterBadge = item.querySelector('.inline-counter-badge');
 
-        // Photo 7-second auto-switch + click-to-next for card preview
-        if (album.items && album.items.length > 1) {
-          let currentCardIdx = 0;
-          let cardTimer = null;
+        function renderCurrentMedia() {
+          const media = items[currentItemIdx];
+          if (!media || !mediaContainer) return;
 
-          function nextCardImage() {
-            currentCardIdx = (currentCardIdx + 1) % album.items.length;
-            const targetItem = album.items[currentCardIdx];
-            if (imgEl && targetItem.type === 'image') {
-              imgEl.src = targetItem.url;
-            }
+          if (counterBadge) {
+            counterBadge.textContent = `${currentItemIdx + 1} / ${items.length}`;
           }
 
-          function resetCardTimer() {
-            if (cardTimer) clearInterval(cardTimer);
-            cardTimer = setInterval(nextCardImage, 7000);
+          if (media.type === 'video') {
+            mediaContainer.innerHTML = `
+              <video src="${media.url}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline controls style="cursor: pointer;"></video>
+            `;
+          } else {
+            mediaContainer.innerHTML = `
+              <img src="${media.url}" alt="${album.title}" class="photo-strip-img" loading="lazy" style="cursor: pointer;">
+            `;
           }
 
-          // Auto-slide every 7 seconds for photo cards
-          if (album.type === 'photo' || album.type === 'gallery') {
-            resetCardTimer();
-          }
+          resetAutoTimer();
+        }
 
-          // Clicking on image switches to next photo + resets 7s timer
-          if (imgWrap) {
-            imgWrap.addEventListener('click', (e) => {
-              e.stopPropagation();
-              nextCardImage();
-              resetCardTimer();
-            });
+        function resetAutoTimer() {
+          if (autoTimer) clearInterval(autoTimer);
+          const currentMedia = items[currentItemIdx];
+          // Auto-switch photos every 7 seconds
+          if (currentMedia && currentMedia.type === 'image' && items.length > 1) {
+            autoTimer = setInterval(() => {
+              currentItemIdx = (currentItemIdx + 1) % items.length;
+              renderCurrentMedia();
+            }, 7000);
           }
         }
 
-        // Clicking on card caption opens full Lightbox Modal
-        item.querySelector('.photo-strip-caption').addEventListener('click', () => {
-          openPhotoModal(album);
-        });
+        function showNext() {
+          currentItemIdx = (currentItemIdx + 1) % items.length;
+          renderCurrentMedia();
+        }
 
+        function showPrev() {
+          currentItemIdx = (currentItemIdx - 1 + items.length) % items.length;
+          renderCurrentMedia();
+        }
+
+        if (nextBtn) {
+          nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNext();
+          });
+        }
+        if (prevBtn) {
+          prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPrev();
+          });
+        }
+
+        // Clicking on the media container advances to next media
+        if (mediaContainer) {
+          mediaContainer.addEventListener('click', (e) => {
+            // Only switch if clicking on image or area (allow video controls)
+            if (e.target.tagName !== 'VIDEO') {
+              if (items.length > 1) {
+                showNext();
+              }
+            }
+          });
+        }
+
+        renderCurrentMedia();
         photoStrip.appendChild(item);
       });
     }

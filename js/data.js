@@ -334,73 +334,66 @@ const MENTOR_DATA = [
 const DOCUMENTATION_PHOTOS = [
   {
     type: "photo",
-    title: "Foto Day 1",
-    caption: "desain awal  day 1 & lapor kerkom day 1",
+    title: "Foto Kerkom Day 1",
     url: "dokumentasi/foto/desain awal  day 1.jpeg",
     items: [
-      { type: "image", url: "dokumentasi/foto/desain awal  day 1.jpeg", caption: "desain awal  day 1" },
-      { type: "image", url: "dokumentasi/foto/lapor kerkom day 1.jpeg", caption: "lapor kerkom day 1" }
+      { type: "image", url: "dokumentasi/foto/desain awal  day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/lapor kerkom day 1.jpeg" }
+    ]
+  },
+  {
+    type: "video",
+    title: "Video Kerkom Day 1",
+    url: "dokumentasi/video/yel yel day 1.mp4",
+    items: [
+      { type: "video", url: "dokumentasi/video/yel yel day 1.mp4" },
+      { type: "video", url: "dokumentasi/video/nopal santai day 1.mp4" },
+      { type: "video", url: "dokumentasi/video/parodi dilan day 1.mp4" },
+      { type: "video", url: "dokumentasi/video/mileaaa? day 1.mp4" }
     ]
   },
   {
     type: "photo",
-    title: "Foto Day 2",
-    caption: "awal daday day 2, cat abis woi day 2, & all base abiss day 2",
+    title: "Foto Kerkom Day 2",
     url: "dokumentasi/foto/awal daday day 2.jpeg",
     items: [
-      { type: "image", url: "dokumentasi/foto/awal daday day 2.jpeg", caption: "awal daday day 2" },
-      { type: "image", url: "dokumentasi/foto/cat abis woi day 2.jpeg", caption: "cat abis woi day 2" },
-      { type: "image", url: "dokumentasi/foto/all base abiss day 2.jpeg", caption: "all base abiss day 2" }
+      { type: "image", url: "dokumentasi/foto/awal daday day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/cat abis woi day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/all base abiss day 2.jpeg" }
     ]
   },
   {
     type: "video",
-    title: "Video Day 1",
-    caption: "yel yel day 1, nopal santai day 1, parodi dilan day 1, & mileaaa? day 1",
-    url: "dokumentasi/video/yel yel day 1.mp4",
-    poster: "dokumentasi/foto/desain awal  day 1.jpeg",
-    items: [
-      { type: "video", url: "dokumentasi/video/yel yel day 1.mp4", caption: "yel yel day 1" },
-      { type: "video", url: "dokumentasi/video/nopal santai day 1.mp4", caption: "nopal santai day 1" },
-      { type: "video", url: "dokumentasi/video/parodi dilan day 1.mp4", caption: "parodi dilan day 1" },
-      { type: "video", url: "dokumentasi/video/mileaaa? day 1.mp4", caption: "mileaaa? day 1" }
-    ]
-  },
-  {
-    type: "video",
-    title: "Video Day 2",
-    caption: "mulqi mulai day 2, cat abis day 2, ngecat day 2, ngecat 2 day 2, pegang kayu day 2, before pegal day 2, pegel day 2, & tambah sedikit day 2",
+    title: "Video Kerkom Day 2",
     url: "dokumentasi/video/mulqi mulai day 2.mp4",
-    poster: "dokumentasi/foto/awal daday day 2.jpeg",
     items: [
-      { type: "video", url: "dokumentasi/video/mulqi mulai day 2.mp4", caption: "mulqi mulai day 2" },
-      { type: "video", url: "dokumentasi/video/cat abis day 2.mp4", caption: "cat abis day 2" },
-      { type: "video", url: "dokumentasi/video/ngecat day 2.mp4", caption: "ngecat day 2" },
-      { type: "video", url: "dokumentasi/video/ngecat 2 day 2.mp4", caption: "ngecat 2 day 2" },
-      { type: "video", url: "dokumentasi/video/pegang kayu day 2.mp4", caption: "pegang kayu day 2" },
-      { type: "video", url: "dokumentasi/video/before pegal day 2.mp4", caption: "before pegal day 2" },
-      { type: "video", url: "dokumentasi/video/pegel day 2.mp4", caption: "pegel day 2" },
-      { type: "video", url: "dokumentasi/video/tambah sedikit day 2.mp4", caption: "tambah sedikit day 2" }
+      { type: "video", url: "dokumentasi/video/mulqi mulai day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/cat abis day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/ngecat day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/ngecat 2 day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/pegang kayu day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/before pegal day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/pegel day 2.mp4" },
+      { type: "video", url: "dokumentasi/video/tambah sedikit day 2.mp4" }
     ]
   },
   {
     type: "gallery",
-    title: "Foto & Video Bersama",
-    caption: "Gabungan Foto & Video Bersama Day 1 & Day 2 (Termasuk angka 3)",
+    title: "SEE YOUU GUYS",
     url: "dokumentasi/foto/fotobersama day 2.jpeg",
     items: [
-      { type: "image", url: "dokumentasi/foto/fotobersama 3.jpeg", caption: "fotobersama 3" },
-      { type: "image", url: "dokumentasi/foto/fotobersama sama 3.jpeg", caption: "fotobersama sama 3" },
-      { type: "image", url: "dokumentasi/foto/fotobersamaa 3.jpeg", caption: "fotobersamaa 3" },
-      { type: "video", url: "dokumentasi/video/welove day 2 3.mp4", caption: "welove day 2 3" },
-      { type: "video", url: "dokumentasi/video/bersama tagline day 2 3.mp4", caption: "bersama tagline day 2 3" },
-      { type: "video", url: "dokumentasi/video/ipal yolo day  2 3.mp4", caption: "ipal yolo day  2 3" },
-      { type: "image", url: "dokumentasi/foto/fotobersama day 2.jpeg", caption: "fotobersama day 2" },
-      { type: "image", url: "dokumentasi/foto/foto bersama day 1.jpeg", caption: "foto bersama day 1" },
-      { type: "image", url: "dokumentasi/foto/foto bersama1 day 1.jpeg", caption: "foto bersama1 day 1" },
-      { type: "image", url: "dokumentasi/foto/foto bersama2 day 1.jpeg", caption: "foto bersama2 day 1" },
-      { type: "video", url: "dokumentasi/video/awal Lukis day 1 .mp4", caption: "awal Lukis day 1" },
-      { type: "video", url: "dokumentasi/video/logistik pulang day 2.mp4", caption: "logistik pulang day 2" }
+      { type: "image", url: "dokumentasi/foto/fotobersama 3.jpeg" },
+      { type: "image", url: "dokumentasi/foto/fotobersama sama 3.jpeg" },
+      { type: "image", url: "dokumentasi/foto/fotobersamaa 3.jpeg" },
+      { type: "video", url: "dokumentasi/video/welove day 2 3.mp4" },
+      { type: "video", url: "dokumentasi/video/bersama tagline day 2 3.mp4" },
+      { type: "video", url: "dokumentasi/video/ipal yolo day  2 3.mp4" },
+      { type: "image", url: "dokumentasi/foto/fotobersama day 2.jpeg" },
+      { type: "image", url: "dokumentasi/foto/foto bersama day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/foto bersama1 day 1.jpeg" },
+      { type: "image", url: "dokumentasi/foto/foto bersama2 day 1.jpeg" },
+      { type: "video", url: "dokumentasi/video/awal Lukis day 1 .mp4" },
+      { type: "video", url: "dokumentasi/video/logistik pulang day 2.mp4" }
     ]
   }
 ];
