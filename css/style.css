@@ -1209,3 +1209,120 @@ html, body {
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85);
   }
 }
+
+/* Photo & Video Lightbox Modal */
+.photo-modal-card {
+  width: 90%;
+  max-width: 680px;
+  max-height: 90vh;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 24px;
+  padding: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.photo-modal-media-container {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: #000;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.photo-modal-img {
+  width: 100%;
+  max-height: 55vh;
+  object-fit: contain;
+  display: block;
+}
+
+.photo-modal-video {
+  width: 100%;
+  max-height: 55vh;
+  display: block;
+  background: #000;
+}
+
+.video-play-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid var(--color-accent-gold);
+  color: var(--color-accent-gold);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.photo-modal-gallery-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: 0.4rem;
+}
+
+.gallery-thumb-btn {
+  flex: 0 0 64px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  position: relative;
+  background: #110426;
+}
+
+.gallery-thumb-btn.active, .gallery-thumb-btn:hover {
+  opacity: 1;
+  border-color: var(--color-accent-gold);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.gallery-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-modal-caption {
+  font-family: var(--font-subhead);
+  font-size: 0.95rem;
+  color: #f0e6ff;
+  margin-top: 0.75rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.photo-caption-title {
+  font-family: var(--font-subhead);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-accent-gold);
+  margin-bottom: 0.2rem;
+}
+
+.photo-caption-hint {
+  font-size: 0.78rem;
+  color: var(--color-accent-magenta);
+  margin-top: 0.35rem;
+  font-weight: 600;
+}

@@ -194,11 +194,15 @@
     </div>
   </div>
 
-  <!-- Documentation Photo Lightbox Modal -->
+  <!-- Documentation Photo & Video Lightbox Modal -->
   <div id="photoModal" class="modal-overlay" aria-hidden="true">
     <div class="photo-modal-card">
       <button id="photoModalCloseBtn" class="modal-close-btn" aria-label="Tutup">&times;</button>
-      <img id="photoModalImg" src="" alt="Dokumentasi PKKMB" class="photo-modal-img">
+      <div id="photoModalMediaContainer" class="photo-modal-media-container">
+        <img id="photoModalImg" src="" alt="Dokumentasi PKKMB" class="photo-modal-img">
+        <video id="photoModalVideo" src="" class="photo-modal-video" controls autoplay playsinline style="display: none;"></video>
+      </div>
+      <div id="photoModalGalleryNav" class="photo-modal-gallery-nav"></div>
       <p id="photoModalCaption" class="photo-modal-caption"></p>
     </div>
   </div>

@@ -143,25 +143,62 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Populate photo strip (5 photos, alternating L/R)
+    // Populate photo strip (5 documentation albums: Foto Day 1, Foto Day 2, Video Day 1, Video Day 2, Foto & Video Bersama)
     const photoStrip = document.getElementById('photoStrip');
     if (photoStrip && typeof DOCUMENTATION_PHOTOS !== 'undefined') {
       photoStrip.innerHTML = '';
-      const photos = DOCUMENTATION_PHOTOS.slice(0, 5);
-      photos.forEach((photo, i) => {
+      DOCUMENTATION_PHOTOS.forEach((album, i) => {
         const dir = i % 2 === 0 ? 'from-left' : 'from-right';
         const item = document.createElement('div');
         item.className = `photo-strip-item ${dir}`;
+        item.style.cursor = 'pointer';
+        
+        let mediaHTML = '';
+        if (album.type === 'video') {
+          mediaHTML = `
+            <div class="photo-strip-img-wrap video-wrap" style="position: relative;">
+              <video src="${album.url}" class="photo-strip-img photo-strip-video" autoplay muted loop playsinline></video>
+              <div class="video-play-badge">▶ 10s Video</div>
+            </div>
+          `;
+        } else {
+          mediaHTML = `
+            <div class="photo-strip-img-wrap">
+              <img src="${album.url}" alt="${album.title}" class="photo-strip-img" loading="lazy">
+            </div>
+          `;
+        }
+
+        const countText = album.items ? `${album.items.length} file` : '';
+
         item.innerHTML = `
-          <div class="photo-strip-img-wrap">
-            <img src="${photo.url}" alt="${photo.caption}" class="photo-strip-img" loading="lazy">
-          </div>
+          ${mediaHTML}
           <div class="photo-strip-caption">
             <div class="photo-caption-num">0${i + 1}</div>
-            <div class="photo-caption-text">${photo.caption}</div>
+            <div class="photo-caption-title">${album.title}</div>
+            <div class="photo-caption-text">${album.caption}</div>
+            <div class="photo-caption-hint">✨ Klik untuk buka galeri ${countText}</div>
           </div>
         `;
+
+        // Click event to open Lightbox Modal
+        item.addEventListener('click', () => {
+          openPhotoModal(album);
+        });
+
         photoStrip.appendChild(item);
+
+        // Max 10-second loop control for preview video in card
+        if (album.type === 'video') {
+          const v = item.querySelector('video');
+          if (v) {
+            v.addEventListener('timeupdate', () => {
+              if (v.currentTime >= 10) {
+                v.currentTime = 0;
+              }
+            });
+          }
+        }
       });
     }
 
@@ -455,6 +492,117 @@ document.addEventListener('DOMContentLoaded', () => {
       openMenteeModal(currentMenteeIndex + 1);
     }
   });
+
+  // =============================================
+  // Photo & Video Lightbox Modal
+  // =============================================
+  const photoModal = document.getElementById('photoModal');
+  const photoModalCloseBtn = document.getElementById('photoModalCloseBtn');
+  const photoModalImg = document.getElementById('photoModalImg');
+  const photoModalVideo = document.getElementById('photoModalVideo');
+  const photoModalGalleryNav = document.getElementById('photoModalGalleryNav');
+  const photoModalCaption = document.getElementById('photoModalCaption');
+
+  let photoModalVideoTimeHandler = null;
+
+  function openPhotoModal(album) {
+    if (!photoModal) return;
+    soundEngine.playStarClickSound();
+
+    const items = album.items || [{ type: album.type === 'video' ? 'video' : 'image', url: album.url, caption: album.caption }];
+    
+    function setMediaItem(itemIndex) {
+      const media = items[itemIndex];
+      if (!media) return;
+
+      // Update thumbnail active state
+      if (photoModalGalleryNav) {
+        photoModalGalleryNav.querySelectorAll('.gallery-thumb-btn').forEach((btn, idx) => {
+          btn.classList.toggle('active', idx === itemIndex);
+        });
+      }
+
+      // Update caption
+      if (photoModalCaption) {
+        photoModalCaption.textContent = media.caption || album.caption;
+      }
+
+      if (media.type === 'video') {
+        if (photoModalImg) photoModalImg.style.display = 'none';
+        if (photoModalVideo) {
+          photoModalVideo.style.display = 'block';
+          photoModalVideo.src = media.url;
+          photoModalVideo.currentTime = 0;
+          photoModalVideo.play().catch(() => {});
+
+          // Remove old listener if present
+          if (photoModalVideoTimeHandler) {
+            photoModalVideo.removeEventListener('timeupdate', photoModalVideoTimeHandler);
+          }
+
+          // Max 10-second loop control for video
+          photoModalVideoTimeHandler = () => {
+            if (photoModalVideo.currentTime >= 10) {
+              photoModalVideo.currentTime = 0;
+            }
+          };
+          photoModalVideo.addEventListener('timeupdate', photoModalVideoTimeHandler);
+        }
+      } else {
+        if (photoModalVideo) {
+          photoModalVideo.pause();
+          photoModalVideo.style.display = 'none';
+        }
+        if (photoModalImg) {
+          photoModalImg.style.display = 'block';
+          photoModalImg.src = media.url;
+          photoModalImg.alt = media.caption || album.caption;
+        }
+      }
+    }
+
+    // Build thumbnail navigation buttons
+    if (photoModalGalleryNav) {
+      photoModalGalleryNav.innerHTML = '';
+      if (items.length > 1) {
+        items.forEach((subItem, idx) => {
+          const btn = document.createElement('button');
+          btn.className = `gallery-thumb-btn ${idx === 0 ? 'active' : ''}`;
+          btn.title = subItem.caption || `Media ${idx + 1}`;
+
+          if (subItem.type === 'video') {
+            btn.innerHTML = `<span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #fbbf24;">▶ MP4</span>`;
+          } else {
+            btn.innerHTML = `<img src="${subItem.url}" class="gallery-thumb-img" alt="thumb">`;
+          }
+
+          btn.addEventListener('click', () => setMediaItem(idx));
+          photoModalGalleryNav.appendChild(btn);
+        });
+      }
+    }
+
+    setMediaItem(0);
+    photoModal.classList.add('active');
+  }
+
+  function closePhotoModal() {
+    if (!photoModal) return;
+    photoModal.classList.remove('active');
+    if (photoModalVideo) {
+      photoModalVideo.pause();
+      photoModalVideo.src = '';
+    }
+  }
+
+  if (photoModalCloseBtn) {
+    photoModalCloseBtn.addEventListener('click', closePhotoModal);
+  }
+  if (photoModal) {
+    photoModal.addEventListener('click', (e) => {
+      if (e.target === photoModal) closePhotoModal();
+    });
+  }
 
   // =============================================
   // Mentee Search & List Sheet

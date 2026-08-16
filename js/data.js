@@ -315,41 +315,83 @@ const MENTOR_DATA = [
     id: 1,
     name: "Riski Raditiya (iqi)",
     role: "Mentor Cluster 32 - Serpens",
-    message: "Untuk 33 adik-adikku yang luar biasa di Cluster 32, terima kasih sudah berjuang keras dan saling merangkul selama hari-hari PKKMB. Melihat kalian berkembang dan kompak adalah kebanggaan terbesar buat kakak. Jangan pernah ragu untuk mengejar mimpi kalian di kampus ini. Kakak selalu ada untuk kalian!",
+    message: "Untuk adik-adikku yang luar biasa di Cluster 32, terima kasih sudah berjuang keras dan saling merangkul selama hari-hari PKKMB. Melihat kalian berkembang dan kompak adalah kebanggaan terbesar buat kakak. Jangan pernah ragu untuk mengejar mimpi kalian di kampus ini. Kakak selalu ada untuk kalian!",
     avatarBg: "linear-gradient(135deg, #fbbf24, #f59e0b)",
     icon: "👑",
     photo: "img/mentor1.jpeg"
   },
   {
     id: 2,
-    name: "Anggita Puspa Royanita(Gita)",
+    name: "Anggita Puspa Royanita (Gita)",
     role: "Mentor Cluster 32 - Serpens",
     message: "Selamat telah menyelesaikan hari PKKMB dengan senyuman dan kekompakan yang membanggakan! Cluster 32 Serpens ini bukan cuma sekadar kelompok PKKMB, tapi keluarga pertama kalian di kampus. Tetap jaga tali silaturahmi ini sampai kita wisuda nanti ya!",
     avatarBg: "linear-gradient(135deg, #a855f7, #ec4899)",
     icon: "✨",
-    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+    photo: "img/mentor2.jpeg"
   }
 ];
 
 const DOCUMENTATION_PHOTOS = [
   {
-    caption: "Keseruan Hari Pertama PKKMB Cluster 32",
-    url: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80"
+    type: "photo",
+    title: "Foto Day 1",
+    caption: "Dokumentasi Foto Day 1 — Awal Semangat & Pengerjaan Tugas",
+    url: "dokumentasi/foto/desain awal day 1.jpeg",
+    items: [
+      { type: "image", url: "dokumentasi/foto/desain awal day 1.jpeg", caption: "Desain Awal Day 1" },
+      { type: "image", url: "dokumentasi/foto/lapor day 1.jpeg", caption: "Lapor Tugas Day 1" }
+    ]
   },
   {
-    caption: "Kekompakan & Senyum Bahagia Cluster 32 Serpens",
-    url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&fit=crop&q=80"
+    type: "photo",
+    title: "Foto Day 2",
+    caption: "Dokumentasi Foto Day 2 — Kekompakan & Hasil Karya",
+    url: "dokumentasi/foto/awal day 2.jpeg",
+    items: [
+      { type: "image", url: "dokumentasi/foto/awal day 2.jpeg", caption: "Awal Semangat Day 2" },
+      { type: "image", url: "dokumentasi/foto/cat abis day 2.jpeg", caption: "Hasil Cat & Perjuangan Day 2" },
+      { type: "image", url: "dokumentasi/foto/all base day 2.jpeg", caption: "Base Kelompok Day 2" }
+    ]
   },
   {
-    caption: "Pengerjaan Tugas Kelompok Bersama",
-    url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop&q=80"
+    type: "video",
+    title: "Video Day 1",
+    caption: "Dokumentasi Video Day 1 — Yel-Yel & Keceriaan Kelompok (Max 10s)",
+    url: "dokumentasi/video/yel yel day 1.mp4",
+    poster: "dokumentasi/foto/desain awal day 1.jpeg",
+    items: [
+      { type: "video", url: "dokumentasi/video/yel yel day 1.mp4", caption: "Yel-Yel Semangat Day 1" },
+      { type: "video", url: "dokumentasi/video/nopal santai day 1.mp4", caption: "Momen Santai Day 1" },
+      { type: "video", url: "dokumentasi/video/day1 dilan milea.mp4", caption: "Canda Tawa Day 1" },
+      { type: "video", url: "dokumentasi/video/Dilan day 1.mp4", caption: "Keseruan Kelompok Day 1" }
+    ]
   },
   {
-    caption: "Momen Inagurasi Penutupan PKKMB",
-    url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&auto=format&fit=crop&q=80"
+    type: "video",
+    title: "Video Day 2",
+    caption: "Dokumentasi Video Day 2 — Perjuangan & Tawa Kebersamaan (Max 10s)",
+    url: "dokumentasi/video/welove day 2.mp4",
+    poster: "dokumentasi/foto/awal day 2.jpeg",
+    items: [
+      { type: "video", url: "dokumentasi/video/welove day 2.mp4", caption: "We Love Cluster 32 Day 2" },
+      { type: "video", url: "dokumentasi/video/tagline day 2.mp4", caption: "Tagline Serpens Day 2" },
+      { type: "video", url: "dokumentasi/video/cat abis day 2.mp4", caption: "Momen Pengecatan Day 2" },
+      { type: "video", url: "dokumentasi/video/tambah sedikit day 2.mp4", caption: "Semangat Ekstra Day 2" },
+      { type: "video", url: "dokumentasi/video/pegel day 2.mp4", caption: "Perjuangan Bersama Day 2" }
+    ]
   },
   {
-    caption: "Kenangan Manis Cluster 32 — Sampai Jumpa!",
-    url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=80"
+    type: "gallery",
+    title: "Foto & Video Bersama",
+    caption: "Dokumentasi Foto & Video Bersama Day 1 & Day 2 (Menyatu)",
+    url: "dokumentasi/foto/fotobersama day 2.jpeg",
+    items: [
+      { type: "image", url: "dokumentasi/foto/fotobersama day 2.jpeg", caption: "Foto Bersama Utama Day 2" },
+      { type: "image", url: "dokumentasi/foto/foto bersama day 1.jpeg", caption: "Foto Bersama Day 1 (Pose 1)" },
+      { type: "image", url: "dokumentasi/foto/foto bersama1 day 1.jpeg", caption: "Foto Bersama Day 1 (Pose 2)" },
+      { type: "image", url: "dokumentasi/foto/foto bersama2 day 1.jpeg", caption: "Foto Bersama Day 1 (Pose 3)" },
+      { type: "video", url: "dokumentasi/video/awal Lukis day 1 .mp4", caption: "Video Bersama Awal Lukis Day 1" },
+      { type: "video", url: "dokumentasi/video/logistik pulang day 2.mp4", caption: "Video Pulang Logistik Day 2" }
+    ]
   }
 ];
