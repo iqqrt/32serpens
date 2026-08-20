@@ -330,60 +330,190 @@ const MENTOR_DATA = [
 
 const DOCUMENTATION_PHOTOS = [
   {
-    type: "photo",
-    title: "Foto Kerkom Day 1",
-    items: [
-      { type: "image", url: "dokumentasi/foto/day 1/desain awal  day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 1/foto bersama day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 1/foto bersama1 day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 1/foto bersama2 day 1.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 1/lapor kerkom day 1.jpeg" }
+    "type": "photo",
+    "title": "Foto Kerkom Day 1",
+    "items": [
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 1/desain awal  day 1.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 1/foto bersama day 1.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 1/foto bersama1 day 1.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 1/foto bersama2 day 1.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 1/lapor kerkom day 1.jpeg"
+      }
     ]
   },
   {
-    type: "video",
-    title: "Video Kerkom Day 1",
-    items: [
-      { type: "video", url: "dokumentasi/video/day 1/awal Lukis day 1 .mp4" },
-      { type: "video", url: "dokumentasi/video/day 1/nopal santai day 1.mp4" },
-      { type: "video", url: "dokumentasi/video/day 1/parodi dilan day 1.mp4" },
-      { type: "video", url: "dokumentasi/video/day 1/yel yel day 1.mp4" }
+    "type": "video",
+    "title": "Video Kerkom Day 1",
+    "items": [
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 1/awal Lukis day 1 .mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 1/nopal santai day 1.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 1/parodi dilan day 1.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 1/yel yel day 1.mp4"
+      }
     ]
   },
   {
-    type: "photo",
-    title: "Foto Kerkom Day 2",
-    items: [
-      { type: "image", url: "dokumentasi/foto/day 2/awal daday day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 2/cat abis woi day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 2/all base abiss day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 2/fotobersama day 2.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 2/WhatsApp Image 2026-08-16 at 8.53.37 PM.jpeg" },
-      { type: "image", url: "dokumentasi/foto/day 2/WhatsApp Image 2026-08-16 at 8.55.58 PM.jpeg" }
+    "type": "photo",
+    "title": "Foto Kerkom Day 2",
+    "items": [
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 2/awal daday day 2.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 2/cat abis woi day 2.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 2/all base abiss day 2.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 2/fotobersama day 2.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 2/WhatsApp Image 2026-08-16 at 8.53.37 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/day 2/WhatsApp Image 2026-08-16 at 8.55.58 PM.jpeg"
+      }
     ]
   },
   {
-    type: "video",
-    title: "Video Kerkom Day 2",
-    items: [
-      { type: "video", url: "dokumentasi/video/day 2/mulqi mulai day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/day 2/before pegal day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/day 2/pegel day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/day 2/tambah sedikit day 2.mp4" },
-      { type: "video", url: "dokumentasi/video/day 2/logistik pulang day 2.mp4" }
+    "type": "video",
+    "title": "Video Kerkom Day 2",
+    "items": [
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 2/mulqi mulai day 2.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 2/before pegal day 2.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 2/pegel day 2.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 2/tambah sedikit day 2.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/day 2/logistik pulang day 2.mp4"
+      }
     ]
   },
   {
-    type: "gallery",
-    title: "SEE YOUU GUYS",
-    isPortrait: true,
-    items: [
-      { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersama 3.jpeg" },
-      { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersama sama 3.jpeg" },
-      { type: "image", url: "dokumentasi/foto/SEE YOU GUYS/fotobersamaa 3.jpeg" },
-      { type: "video", url: "dokumentasi/video/SEE YOU GUYS/welove day 2 3.mp4" },
-      { type: "video", url: "dokumentasi/video/SEE YOU GUYS/bersama tagline day 2 3.mp4" },
-      { type: "video", url: "dokumentasi/video/SEE YOU GUYS/ipal yolo day  2 3.mp4" }
+    "type": "photo",
+    "title": "Foto Hari H PKKMB",
+    "items": [
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/WhatsApp Image 2026-08-20 at 9.26.03 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/WhatsApp Image 2026-08-20 at 9.26.05 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/WhatsApp Image 2026-08-20 at 9.26.07 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/gvrgz_WhatsApp Image 2026-08-20 at 5.23.46 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/inwxf_WhatsApp Image 2026-08-20 at 9.26.05 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/meofc_WhatsApp Image 2026-08-20 at 9.26.05 PM.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/Hari H PKKMB/ngqbt_WhatsApp Image 2026-08-20 at 9.26.07 PM.jpeg"
+      }
+    ]
+  },
+  {
+    "type": "video",
+    "title": "Video Hari H PKKMB",
+    "items": [
+      {
+        "type": "video",
+        "url": "dokumentasi/video/Hari H PKKMB/WhatsApp Video 2026-08-20 at 9.26.03 PM.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/Hari H PKKMB/WhatsApp Video 2026-08-20 at 9.26.04 PM.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/Hari H PKKMB/yzjsb_WhatsApp Video 2026-08-20 at 9.26.04 PM.mp4"
+      }
+    ]
+  },
+  {
+    "type": "gallery",
+    "title": "SEE YOUU GUYS",
+    "isPortrait": true,
+    "items": [
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/SEE YOU GUYS/fotobersama 3.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/SEE YOU GUYS/fotobersama sama 3.jpeg"
+      },
+      {
+        "type": "image",
+        "url": "dokumentasi/foto/SEE YOU GUYS/fotobersamaa 3.jpeg"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/SEE YOU GUYS/welove day 2 3.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/SEE YOU GUYS/bersama tagline day 2 3.mp4"
+      },
+      {
+        "type": "video",
+        "url": "dokumentasi/video/SEE YOU GUYS/ipal yolo day  2 3.mp4"
+      }
     ]
   }
 ];
