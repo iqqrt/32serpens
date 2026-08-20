@@ -520,6 +520,7 @@ html, body {
   border-left: 3px solid var(--color-accent-gold);
   background: rgba(11, 3, 26, 0.5);
   font-style: italic;
+  white-space: pre-line;
 }
 
 @media (max-width: 640px) {
